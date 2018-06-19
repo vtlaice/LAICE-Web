@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { HashRouter, Route } from 'react-router-dom'
+import { BrowserRouter, Route } from 'react-router-dom'
 
 import './App.css';
 import MainNavbar from "./common/MainNavbar";
@@ -10,7 +10,7 @@ class App extends Component {
   render() {
     return (
       <div>
-          <HashRouter>
+          <BrowserRouter>
               <div>
                 <MainNavbar/>
                   <div>
@@ -18,7 +18,7 @@ class App extends Component {
                     <Route path="/packetBuilder" component={PacketBuilderRoot}/>
                   </div>
               </div>
-          </HashRouter>
+          </BrowserRouter>
       </div>
     );
   }
