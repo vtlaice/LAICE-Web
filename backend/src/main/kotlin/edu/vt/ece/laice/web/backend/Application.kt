@@ -1,9 +1,15 @@
 package edu.vt.ece.laice.web.backend
 
+import edu.vt.ece.laice.web.backend.model.Packet
+import edu.vt.ece.laice.web.backend.packet.CommandPacket
+import edu.vt.ece.laice.web.backend.repository.PacketRepository
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.autoconfigure.domain.EntityScan
 import org.springframework.boot.runApplication
 import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters
+import org.springframework.stereotype.Component
+import java.time.Instant
 import java.util.*
 import javax.annotation.PostConstruct
 
@@ -18,4 +24,19 @@ class Application {
 
 fun main(args: Array<String>) {
     runApplication<Application>(*args)
+}
+
+
+@Component
+class TestComponent {
+    @Autowired
+    lateinit var packetRepository: PacketRepository
+
+    @PostConstruct
+    fun addTestPacket() {
+        val cmd = CommandPacket.NULL
+        val packet = Packet(time = Instant.now(), commandPacket = cmd, crc32 = cmd.crc32())
+        packetRepository.save(packet)
+        println("ADDED TEST PACKET")
+    }
 }
