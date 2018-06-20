@@ -1,11 +1,11 @@
 package edu.vt.ece.laice.web.backend.packet
 
-enum class StartWordLIIB(override val bin: String): BinString {
+enum class StartWordLIIB(override val bin: String): BinEnum {
     NULL                  ("00000000"),
     NORMAL_OPERATION_LIIB ("01000011")
 }
 
-enum class LIIBMode(override val bin: String): BinString {
+enum class LIIBMode(override val bin: String): BinEnum {
     NULL                  ("00000"),
     NORMAL_MODE           ("00000"),
     TK1_CHARGE            ("00111"),
@@ -15,7 +15,7 @@ enum class LIIBMode(override val bin: String): BinString {
     TK_OVERRIDE           ("11011")
 }
 
-enum class OpMode(override val bin: String): BinString {
+enum class OpMode(override val bin: String): BinEnum {
     NULL                  ("000"),
     SAFE                  ("000"), //Instruments OFF
     SNEUPI_ON             ("001"),
@@ -30,5 +30,5 @@ enum class OpMode(override val bin: String): BinString {
 data class CommandLIIB(val startWord: StartWordLIIB = StartWordLIIB.NORMAL_OPERATION_LIIB,
                        val liibMode: LIIBMode,
                        val opMode: OpMode): BinString {
-    override val bin = startWord.bin + liibMode.bin + opMode.bin
+    override fun bin() = startWord.bin + liibMode.bin + opMode.bin
 }

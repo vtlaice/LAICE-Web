@@ -40,11 +40,11 @@ data class CommandPacket(val commandLIIB: CommandLIIB,
             )
     }
 
-    override val bin = commandLIIB.bin + commandRPA.bin + commandSNeuPI.bin + commandLINAS.bin
+    override fun bin() = commandLIIB.bin() + commandRPA.bin() + commandSNeuPI.bin() + commandLINAS.bin()
 
     fun crc32(): Long {
         val crc = CRC32()
-        crc.update(bin.toByteArray())
+        crc.update(bin().toByteArray())
         return crc.value
     }
 }

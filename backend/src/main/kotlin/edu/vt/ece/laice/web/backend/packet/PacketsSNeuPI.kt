@@ -1,17 +1,17 @@
 package edu.vt.ece.laice.web.backend.packet
 
-enum class StartWordSNeuPI(override val bin: String): BinString {
+enum class StartWordSNeuPI(override val bin: String): BinEnum {
     NULL              ("00000000"),
     START_WORD_SNEUPI ("01010011")
 }
 
-enum class HVStatusSNeuPI(override val bin: String): BinString {
+enum class HVStatusSNeuPI(override val bin: String): BinEnum {
     NULL              ("0"),
     NV_OFF            ("0"),
     HV_START          ("1")
 }
 
-enum class EmissionModeSNeuPI(override val bin: String): BinString {
+enum class EmissionModeSNeuPI(override val bin: String): BinEnum {
     NULL              ("00"),
     SWEEP_EMISSION    ("00"),
     EMISSION_OFF      ("01"),
@@ -23,5 +23,5 @@ data class CommandSNeuPI(val startWord: StartWordSNeuPI = StartWordSNeuPI.START_
                          val zeroPadding: String = "00000",
                          val hvStatus: HVStatusSNeuPI,
                          val emissionMode: EmissionModeSNeuPI): BinString {
-    override val bin = startWord.bin + zeroPadding + hvStatus.bin + emissionMode.bin
+    override fun bin() = startWord.bin + zeroPadding + hvStatus.bin + emissionMode.bin
 }
