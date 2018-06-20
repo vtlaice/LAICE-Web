@@ -1,7 +1,5 @@
 package edu.vt.ece.laice.web.backend
 
-import edu.vt.ece.laice.web.backend.model.Packet
-import edu.vt.ece.laice.web.backend.packet.*
 import edu.vt.ece.laice.web.backend.repository.PacketRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.SpringBootApplication
@@ -9,7 +7,6 @@ import org.springframework.boot.autoconfigure.domain.EntityScan
 import org.springframework.boot.runApplication
 import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters
 import org.springframework.stereotype.Component
-import java.time.Instant
 import java.util.*
 import javax.annotation.PostConstruct
 

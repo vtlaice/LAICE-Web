@@ -6,8 +6,8 @@ import edu.vt.ece.laice.web.backend.payload.ApiResponse
 import edu.vt.ece.laice.web.backend.payload.JwtAuthenticationResponse
 import edu.vt.ece.laice.web.backend.payload.LoginRequest
 import edu.vt.ece.laice.web.backend.payload.SignUpRequest
-import edu.vt.ece.laice.web.backend.repository.UserRepository
 import edu.vt.ece.laice.web.backend.repository.RoleRepository
+import edu.vt.ece.laice.web.backend.repository.UserRepository
 import edu.vt.ece.laice.web.backend.security.JwtTokenProvider
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity

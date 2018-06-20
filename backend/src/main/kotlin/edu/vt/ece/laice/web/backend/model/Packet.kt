@@ -1,6 +1,5 @@
 package edu.vt.ece.laice.web.backend.model
 
-import com.vladmihalcea.hibernate.type.json.JsonBinaryType
 import com.vladmihalcea.hibernate.type.json.JsonStringType
 import edu.vt.ece.laice.web.backend.model.audit.UserDateAudit
 import edu.vt.ece.laice.web.backend.packet.CommandPacket
