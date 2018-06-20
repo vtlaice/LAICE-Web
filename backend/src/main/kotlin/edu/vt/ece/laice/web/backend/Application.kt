@@ -63,10 +63,11 @@ class TestComponent {
         println("ADDED TEST PACKET")
 */
 
-
+/*
         val packet = packetRepository.findById(1).get()
         println(packet)
         println("BIN: ${packet.commandPacket.bin()}")
+        */
 
     }
 }

@@ -2,6 +2,7 @@ package edu.vt.ece.laice.web.backend.model
 
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType
 import com.vladmihalcea.hibernate.type.json.JsonStringType
+import edu.vt.ece.laice.web.backend.model.audit.UserDateAudit
 import edu.vt.ece.laice.web.backend.packet.CommandPacket
 import org.hibernate.annotations.NaturalId
 import org.hibernate.annotations.Type
@@ -26,4 +27,4 @@ data class Packet(
         val commandPacket: CommandPacket = CommandPacket.NULL,
 
         val crc32: Long = 0L
-)
+): UserDateAudit()
