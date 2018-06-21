@@ -47,4 +47,9 @@ data class CommandPacket(val commandLIIB: CommandLIIB,
         crc.update(bin().toByteArray())
         return crc.value
     }
+
+    //Generates the human-readable packet name, to be displayed on the calendar
+    fun name(): String {
+        return "TODO"
+    }
 }
