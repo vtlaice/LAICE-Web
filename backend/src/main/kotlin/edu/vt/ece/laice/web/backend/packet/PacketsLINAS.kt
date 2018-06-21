@@ -36,11 +36,11 @@ enum class EndWordLINAS(override val bin: String): BinEnum {
     END_WORD_LINAS          ("11111010")
 }
 
-data class CommandLINAS(val filamentSelect: FilamentSelectLINAS,
-                        val gridBiasOnOff: GridBiasOnOffLINAS,
-                        val gridBiasSetting: GridBiasSettingLINAS,
-                        val collectorGainState: CollectorGainStateLINAS,
-                        val filamentOnOff: FilamentOnOffLINAS,
+data class CommandLINAS(val filamentSelect: FilamentSelectLINAS = FilamentSelectLINAS.NULL,
+                        val gridBiasOnOff: GridBiasOnOffLINAS = GridBiasOnOffLINAS.NULL,
+                        val gridBiasSetting: GridBiasSettingLINAS = GridBiasSettingLINAS.NULL,
+                        val collectorGainState: CollectorGainStateLINAS = CollectorGainStateLINAS.NULL,
+                        val filamentOnOff: FilamentOnOffLINAS = FilamentOnOffLINAS.NULL,
                         val endWord: EndWordLINAS = EndWordLINAS.END_WORD_LINAS): BinString {
     override fun bin() = filamentSelect.bin + gridBiasOnOff.bin + gridBiasSetting.bin + collectorGainState.bin + filamentOnOff.bin + endWord.bin
 }

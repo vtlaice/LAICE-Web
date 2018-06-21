@@ -30,10 +30,10 @@ enum class SweepModeRPA(override val bin: String): BinEnum {
 }
 
 data class CommandRPA(val startWord: StartWordRPA = StartWordRPA.START_WORD_RPA,
-                      val stepSize: StepSizeRPA,
-                      val pointsPerSweep: PointPerSweepRPA,
+                      val stepSize: StepSizeRPA = StepSizeRPA.NULL,
+                      val pointsPerSweep: PointPerSweepRPA = PointPerSweepRPA.NULL,
                       val zeroPadding: String = "00000",
-                      val rg2Mode: RG2ModeRPA,
-                      val sweepMode: SweepModeRPA): BinString {
+                      val rg2Mode: RG2ModeRPA = RG2ModeRPA.NULL,
+                      val sweepMode: SweepModeRPA = SweepModeRPA.NULL): BinString {
     override fun bin() = startWord.bin + stepSize.bin + pointsPerSweep.bin + zeroPadding + rg2Mode.bin + sweepMode.bin
 }

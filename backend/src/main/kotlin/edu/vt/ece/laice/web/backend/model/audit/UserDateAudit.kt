@@ -10,7 +10,7 @@ import javax.persistence.MappedSuperclass
         value = ["createdBy", "updatedBy"],
         allowGetters = true
 )
-abstract class UserDateAudit {
+abstract class UserDateAudit: DateAudit() {
     @CreatedBy
     var createdBy: Long = 0L
 

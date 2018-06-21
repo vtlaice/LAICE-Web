@@ -4,9 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import java.util.zip.CRC32
 
 data class CommandPacket(val commandLIIB: CommandLIIB,
-                         val commandRPA: CommandRPA,
-                         val commandSNeuPI: CommandSNeuPI,
-                         val commandLINAS: CommandLINAS): BinString {
+                         val commandRPA: CommandRPA = CommandRPA(),
+                         val commandSNeuPI: CommandSNeuPI = CommandSNeuPI(),
+                         val commandLINAS: CommandLINAS = CommandLINAS()): BinString {
     companion object {
             @JsonIgnore
             val NULL = CommandPacket(

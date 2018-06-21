@@ -21,7 +21,7 @@ enum class EmissionModeSNeuPI(override val bin: String): BinEnum {
 
 data class CommandSNeuPI(val startWord: StartWordSNeuPI = StartWordSNeuPI.START_WORD_SNEUPI,
                          val zeroPadding: String = "00000",
-                         val hvStatus: HVStatusSNeuPI,
-                         val emissionMode: EmissionModeSNeuPI): BinString {
+                         val hvStatus: HVStatusSNeuPI = HVStatusSNeuPI.NULL,
+                         val emissionMode: EmissionModeSNeuPI = EmissionModeSNeuPI.NULL): BinString {
     override fun bin() = startWord.bin + zeroPadding + hvStatus.bin + emissionMode.bin
 }

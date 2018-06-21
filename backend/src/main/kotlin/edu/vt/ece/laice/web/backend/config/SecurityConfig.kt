@@ -79,7 +79,7 @@ class SecurityConfig: WebSecurityConfigurerAdapter() {
                         "/**/*.css",
                         "/**/*.js").permitAll()
                 .antMatchers("/api/auth/**").permitAll()
-                .antMatchers("/api/user/checkEmailAvailability").permitAll()
+                .antMatchers("/api/users/isEmailAvailable").permitAll()
                 .anyRequest().authenticated()
 
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter::class.java)
