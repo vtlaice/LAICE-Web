@@ -1,19 +1,80 @@
 import React, { Component } from 'react'
-import { Navbar, NavbarBrand, Nav, NavItem, Button, ButtonGroup, NavLink } from 'reactstrap'
+import { Navbar, NavbarBrand, Nav, NavItem, Button, NavLink, UncontrolledDropdown, DropdownToggle,
+    DropdownMenu, DropdownItem} from 'reactstrap'
 import { NavLink as RRNavLink } from 'react-router-dom'
+import LoginButton from './LoginButton'
+import API from './API'
 
 class MainNavbar extends Component {
     constructor(props) {
         super(props);
 
+        this.state = {
+            loginPopoverOpen: false
+        };
+
+        this.toggleLoginPopover = this.toggleLoginPopover.bind(this);
+        this.handleLoginSubmit = this.handleLoginSubmit.bind(this);
+        this.createNavItem = this.createNavItem.bind(this);
+        this.createSecureNavItem = this.createSecureNavItem.bind(this);
+        this.createLoginLogoutComponent = this.createLoginLogoutComponent.bind(this);
     }
 
-    static createNavItem(name, page, doRender, exact = false) {
+    toggleLoginPopover() {
+        this.setState({ loginPopoverOpen: !this.state.loginPopoverOpen })
+    }
+
+    handleLoginSubmit() {
+        const request = {  }
+    }
+
+    createNavItem(name, page, doRender, exact = false) {
         if (!doRender) return null;
         return (
             <NavItem>
                 <NavLink tag={RRNavLink} exact={exact} to={page}>{name}</NavLink>
             </NavItem>
+        );
+    }
+
+    createSecureNavItem(name, page, role, exact = false) {
+        if (!this.props.isAuthenticated) return null;
+        if (!this.props.currentUser.roles.includes(role)) return null;
+
+        return this.createNavItem(name, page, true, exact)
+    }
+
+    createLoginLogoutComponent() {
+        if (!this.props.isAuthenticated) {
+            return (
+                <LoginButton onLogin={this.props.onLogin}/>
+                /*
+                <div>
+                    <Button color="primary" id="loginPopover" onClick={this.toggleLoginPopover}>Login</Button>
+                    <Popover placement="bottom" isOpen={this.state.loginPopoverOpen} target="loginPopover" toggle={this.toggleLoginPopover}>
+                        <PopoverHeader>Login</PopoverHeader>
+                        <PopoverBody>
+                            <Form>
+                                <FormGroup><Input type="email" name="email" placeholder="Email Address"/></FormGroup>
+                                <FormGroup><Input type="password" name="password" placeholder="Password"/></FormGroup>
+                                <Button color="success" onClick={this.handleLoginSubmit}>Submit</Button>
+                            </Form>
+                        </PopoverBody>
+                    </Popover>
+                </div>
+                */
+            )
+        }
+        return (
+            <UncontrolledDropdown>
+                <DropdownToggle caret>
+                    {this.props.currentUser.firstName + " " + this.props.currentUser.lastName}
+                </DropdownToggle>
+                <DropdownMenu>
+                    <DropdownItem>Options</DropdownItem>
+                    <DropdownItem onClick={this.props.onLogout}>Logout</DropdownItem>
+                </DropdownMenu>
+            </UncontrolledDropdown>
         );
     }
 
@@ -23,14 +84,11 @@ class MainNavbar extends Component {
                 <Navbar color="dark" dark expand="sm">
                     <NavbarBrand href="/">LAICE</NavbarBrand>
                     <Nav className="mr-auto" navbar>
-                        {MainNavbar.createNavItem("Home", "/", true, true)}
-                        {MainNavbar.createNavItem("Packet Builder", "/packetBuilder", true)}
+                        {this.createNavItem("Home", "/", true, true)}
+                        {this.createSecureNavItem("Packet Builder", "/packetBuilder", "ROLE_VIEW_SCHEDULE")}
                     </Nav>
                     <Nav className="ml-auto" navbar>
-                        <ButtonGroup>
-                            <Button color="primary">Options</Button>
-                            <Button color="danger">Logout</Button>
-                        </ButtonGroup>
+                        {this.createLoginLogoutComponent()}
                     </Nav>
                 </Navbar>
             </div>

@@ -8,6 +8,7 @@
     "react-dom": "^16.4.0",
     "react-router-dom": "^4.3.1",
     "react-scripts": "1.1.4",
+    "react-spinkit": "^3.0.0",
     "reactstrap": "^6.1.0"
   },
   "scripts": {
@@ -15,5 +16,6 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
-  }
+  },
+  "proxy": "http://localhost:5000"
 }

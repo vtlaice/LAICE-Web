@@ -5,8 +5,9 @@ class API {
         });
 
         if (localStorage.getItem('accessToken')) {
-            headers.append("Authentication", "Bearer " + localStorage.getItem('accessToken'))
+            headers.append("Authorization", "Bearer " + localStorage.getItem('accessToken'))
         }
+        console.log(localStorage.getItem('accessToken'));
 
         const defaults = {headers: headers};
         options = Object.assign({}, defaults, options);
