@@ -5,7 +5,7 @@ class ButtonGroupControl extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            selected: null
+            selected: this.props.selected || null
         };
 
         this.onBtn = this.onBtn.bind(this);
@@ -32,7 +32,7 @@ class ButtonGroupControl extends Component {
         });
 
         return (
-            <ButtonGroup size={this.props.size}>
+            <ButtonGroup size={this.props.size} vertical={this.props.vertical} className={this.props.className}>
                 <Button outline disabled>{this.props.name}</Button>
                 {childrenWithProps}
             </ButtonGroup>

@@ -6,7 +6,7 @@ class ListControl extends Component {
         super(props);
 
         this.state = {
-            active: false
+            active: this.props.active || false
         };
 
         this.toggle = this.toggle.bind(this)
@@ -30,11 +30,7 @@ class ListControl extends Component {
                     <ListGroupItemHeading>{this.props.name}</ListGroupItemHeading>
                     <ListGroupItemText>Click to {(this.state.active) ? "disable" : "enable"}</ListGroupItemText>
                 </ListGroupItem>
-                {this.state.active &&
-                <ListGroupItem>
-                    {this.props.children}
-                </ListGroupItem>
-                }
+                {this.state.active && this.props.children}
             </ListGroup>
         );
     }
