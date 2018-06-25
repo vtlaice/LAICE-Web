@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Navbar, NavbarBrand, Nav, NavItem, Button, NavLink, UncontrolledDropdown, DropdownToggle,
-    DropdownMenu, DropdownItem} from 'reactstrap'
+    DropdownMenu, DropdownItem } from 'reactstrap'
 import { NavLink as RRNavLink } from 'react-router-dom'
 import LoginButton from './LoginButton'
 import API from './API'
@@ -48,21 +48,6 @@ class MainNavbar extends Component {
         if (!this.props.isAuthenticated) {
             return (
                 <LoginButton onLogin={this.props.onLogin}/>
-                /*
-                <div>
-                    <Button color="primary" id="loginPopover" onClick={this.toggleLoginPopover}>Login</Button>
-                    <Popover placement="bottom" isOpen={this.state.loginPopoverOpen} target="loginPopover" toggle={this.toggleLoginPopover}>
-                        <PopoverHeader>Login</PopoverHeader>
-                        <PopoverBody>
-                            <Form>
-                                <FormGroup><Input type="email" name="email" placeholder="Email Address"/></FormGroup>
-                                <FormGroup><Input type="password" name="password" placeholder="Password"/></FormGroup>
-                                <Button color="success" onClick={this.handleLoginSubmit}>Submit</Button>
-                            </Form>
-                        </PopoverBody>
-                    </Popover>
-                </div>
-                */
             )
         }
         return (
@@ -71,8 +56,8 @@ class MainNavbar extends Component {
                     {this.props.currentUser.firstName + " " + this.props.currentUser.lastName}
                 </DropdownToggle>
                 <DropdownMenu>
-                    <DropdownItem>Options</DropdownItem>
-                    <DropdownItem onClick={this.props.onLogout}>Logout</DropdownItem>
+                    <DropdownItem href="#">Options</DropdownItem>
+                    <DropdownItem href="#" onClick={this.props.onLogout}>Logout</DropdownItem>
                 </DropdownMenu>
             </UncontrolledDropdown>
         );

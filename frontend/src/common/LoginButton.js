@@ -32,12 +32,16 @@ class LoginButton extends Component {
 
     handleEmailChange(event) {
         this.setState({
+            showAlert: false,
+            alertText: "",
             email: event.target.value
         });
     }
 
     handlePasswordChange(event) {
         this.setState({
+            showAlert: false,
+            alertText: "",
             password: event.target.value
         });
     }

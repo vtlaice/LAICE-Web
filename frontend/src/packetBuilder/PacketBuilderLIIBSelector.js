@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import {Button, ButtonGroup} from 'reactstrap'
+import ButtonGroupControl from '../common/ButtonGroupControl'
 import LiibMode from '../common/LiibMode'
 
 class PacketBuilderLIIBSelector extends Component {
@@ -18,15 +19,14 @@ class PacketBuilderLIIBSelector extends Component {
     render() {
         return (
             <div>
-                <ButtonGroup size="md">
-                    <Button outline disabled>LIIB Mode</Button>
-                    <Button outline color="success" onClick={() => this.onBtn(LiibMode.NORMAL)} active={this.state.selected === LiibMode.NORMAL}>Normal</Button>
-                    <Button outline color="warning" onClick={() => this.onBtn(LiibMode.TK1_CHARGE)} active={this.state.selected === LiibMode.TK1_CHARGE}>TK1 Charge</Button>
-                    <Button outline color="warning" onClick={() => this.onBtn(LiibMode.TK1_DISCHARGE)} active={this.state.selected === LiibMode.TK1_DISCHARGE}>TK1 Discharge</Button>
-                    <Button outline color="warning" onClick={() => this.onBtn(LiibMode.TK2_CHARGE)} active={this.state.selected === LiibMode.TK2_CHARGE}>TK2 Charge</Button>
-                    <Button outline color="warning" onClick={() => this.onBtn(LiibMode.TK2_DISCHARGE)} active={this.state.selected === LiibMode.TK2_DISCHARGE}>TK2 Discharge</Button>
-                    <Button outline color="danger"  onClick={() => this.onBtn(LiibMode.TK_OVERRIDE)} active={this.state.selected === LiibMode.TK_OVERRIDE}>TK Override</Button>
-                </ButtonGroup>
+                <ButtonGroupControl size="md" name="LIIB Mode" onChange={this.onBtn}>
+                    <Button color="success" value={LiibMode.NORMAL}>Normal</Button>
+                    <Button color="warning" value={LiibMode.TK1_CHARGE}>TK1 Charge</Button>
+                    <Button color="warning" value={LiibMode.TK1_DISCHARGE}>TK1 Discharge</Button>
+                    <Button color="warning" value={LiibMode.TK2_CHARGE}>TK2 Charge</Button>
+                    <Button color="warning" value={LiibMode.TK2_DISCHARGE}>TK2 Discharge</Button>
+                    <Button color="danger" value={LiibMode.TK_OVERRIDE}>TK Override</Button>
+                </ButtonGroupControl>
             </div>
         );
     }

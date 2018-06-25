@@ -39,7 +39,7 @@ class App extends Component {
         this.loadCurrentUser()
     }
 
-    handleLogout(redirectTo="/") {
+    handleLogout() {
         localStorage.removeItem("accessToken");
 
         this.setState({
@@ -47,7 +47,7 @@ class App extends Component {
             isAuthenticated: false
         });
 
-        this.props.history.push(redirectTo)
+        this.props.history.push("/");
     }
 
     handleLogin() {
