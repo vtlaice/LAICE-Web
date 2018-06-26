@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import { Button, Popover, PopoverBody, Form, Input, FormGroup, Alert } from 'reactstrap'
+import { Button, Popover, PopoverBody, Form, Input, FormGroup, Alert, Container, Row, Col } from 'reactstrap'
+import Spinner from 'react-spinkit'
 import API from './API'
 
 class LoginButton extends Component {
@@ -7,6 +8,7 @@ class LoginButton extends Component {
         super(props);
 
         this.state = {
+            isLoading: false,
             popoverOpen: false,
             email: "",
             password: "",
@@ -48,16 +50,19 @@ class LoginButton extends Component {
 
     handleSubmit(event) {
         event.preventDefault();
+        this.setState({isLoading: true});
         const request = {
             email: this.state.email,
             password: this.state.password
         };
 
         API.login(request).then(response => {
+            this.setState({isLoading: false});
             localStorage.setItem('accessToken', response.accessToken);
             console.log(localStorage.getItem('accessToken'));
             this.props.onLogin() //Calls up to main app handleLogin
         }).catch(error => {
+            this.setState({isLoading: false});
             console.log(error);
             if (error.status === 401) { //Request is unauthorized
                 this.setState({
@@ -73,8 +78,6 @@ class LoginButton extends Component {
                 });
             }
         });
-
-
     }
 
     render() {
@@ -87,7 +90,11 @@ class LoginButton extends Component {
                             {this.state.showAlert && <Alert color="danger">{this.state.alertText}</Alert>}
                             <FormGroup><Input type="email" name="email" placeholder="Email Address" value={this.state.email} onChange={this.handleEmailChange}/></FormGroup>
                             <FormGroup><Input type="password" name="password" placeholder="Password" value={this.state.password} onChange={this.handlePasswordChange}/></FormGroup>
-                            <Button type="submit" color="success" onClick={this.handleSubmit}>Submit</Button>
+                            <div className="d-flex">
+                                <Button type="submit" color="success" onClick={this.handleSubmit}>Submit</Button>
+
+                                {this.state.isLoading && <Spinner className="d-flex ml-auto" name="circle" fadeIn="none"/>}
+                            </div>
                         </Form>
                     </PopoverBody>
                 </Popover>
