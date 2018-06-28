@@ -32,7 +32,7 @@ class TestComponent {
     @PostConstruct
     fun addTestPacket() {
 /*
-        val cmd = CommandPacket(
+        val cmd = SingleCommandPacket(
                 CommandLIIB(
                         liibMode = LIIBMode.NORMAL_MODE,
                         opMode = OpMode.PRIME_SCIENCE
@@ -55,7 +55,7 @@ class TestComponent {
                         filamentOnOff = FilamentOnOffLINAS.FILAMENT_ON
                 )
         )
-        val packet = Packet(time = Instant.now(), commandPacket = cmd, crc32 = cmd.crc32())
+        val packet = Packet(startTime = Instant.now(), commandPacket = cmd, crc32 = cmd.crc32())
         packetRepository.save(packet)
         println("ADDED TEST PACKET")
 */

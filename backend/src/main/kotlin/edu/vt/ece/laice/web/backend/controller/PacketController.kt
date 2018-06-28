@@ -20,9 +20,9 @@ class PacketController {
     @PreAuthorize("hasRole('VIEW_SCHEDULE')") //TODO change back to SCHEDULE_PACKET
     fun schedulePacket(@RequestBody request: SchedulePacketRequest) {
         val packet = Packet(
-                time = request.time,
-                commandPacket = request.commandPacket,
-                crc32 = request.commandPacket.crc32()
+                startTime = request.startTime,
+                endTime = request.endTime,
+                schedulePacket = request.schedulePacket
         )
 
         packetRepository.save(packet) //Add the packet to the repository

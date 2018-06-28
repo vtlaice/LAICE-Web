@@ -7,7 +7,7 @@ enum class StartWordSNeuPI(override val bin: String): BinEnum {
 
 enum class HVStatusSNeuPI(override val bin: String): BinEnum {
     NULL              ("0"),
-    NV_OFF            ("0"),
+    HV_OFF            ("0"),
     HV_START          ("1")
 }
 
@@ -23,5 +23,14 @@ data class CommandSNeuPI(val startWord: StartWordSNeuPI = StartWordSNeuPI.START_
                          val zeroPadding: String = "00000",
                          val hvStatus: HVStatusSNeuPI = HVStatusSNeuPI.NULL,
                          val emissionMode: EmissionModeSNeuPI = EmissionModeSNeuPI.NULL): BinString {
+    companion object {
+        val NULL = CommandSNeuPI(
+                StartWordSNeuPI.NULL,
+                "00000",
+                HVStatusSNeuPI.NULL,
+                EmissionModeSNeuPI.NULL
+        )
+    }
+
     override fun bin() = startWord.bin + zeroPadding + hvStatus.bin + emissionMode.bin
 }

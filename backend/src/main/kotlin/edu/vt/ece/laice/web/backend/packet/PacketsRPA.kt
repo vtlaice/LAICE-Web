@@ -35,5 +35,16 @@ data class CommandRPA(val startWord: StartWordRPA = StartWordRPA.START_WORD_RPA,
                       val zeroPadding: String = "00000",
                       val rg2Mode: RG2ModeRPA = RG2ModeRPA.NULL,
                       val sweepMode: SweepModeRPA = SweepModeRPA.NULL): BinString {
+    companion object {
+        val NULL = CommandRPA(
+                StartWordRPA.NULL,
+                StepSizeRPA.NULL,
+                PointPerSweepRPA.NULL,
+                "00000",
+                RG2ModeRPA.NULL,
+                SweepModeRPA.NULL
+        )
+    }
+
     override fun bin() = startWord.bin + stepSize.bin + pointsPerSweep.bin + zeroPadding + rg2Mode.bin + sweepMode.bin
 }

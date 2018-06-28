@@ -8,8 +8,7 @@ enum class FilamentSelectLINAS(override val bin: String): BinEnum {
 
 enum class GridBiasOnOffLINAS(override val bin: String): BinEnum {
     NULL                    ("0"),
-    GRID_BIAS_OFF           ("0"),
-    GRID_BIAS_ON            ("1") //Not sure if this exists
+    GRID_BIAS_OFF           ("0")
 }
 
 enum class GridBiasSettingLINAS(override val bin: String): BinEnum {
@@ -42,5 +41,16 @@ data class CommandLINAS(val filamentSelect: FilamentSelectLINAS = FilamentSelect
                         val collectorGainState: CollectorGainStateLINAS = CollectorGainStateLINAS.NULL,
                         val filamentOnOff: FilamentOnOffLINAS = FilamentOnOffLINAS.NULL,
                         val endWord: EndWordLINAS = EndWordLINAS.END_WORD_LINAS): BinString {
+    companion object {
+        val NULL = CommandLINAS(
+                FilamentSelectLINAS.NULL,
+                GridBiasOnOffLINAS.NULL,
+                GridBiasSettingLINAS.NULL,
+                CollectorGainStateLINAS.NULL,
+                FilamentOnOffLINAS.NULL,
+                EndWordLINAS.NULL
+        )
+    }
+
     override fun bin() = filamentSelect.bin + gridBiasOnOff.bin + gridBiasSetting.bin + collectorGainState.bin + filamentOnOff.bin + endWord.bin
 }

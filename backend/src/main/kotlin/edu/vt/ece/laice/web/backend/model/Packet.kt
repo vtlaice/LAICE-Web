@@ -2,8 +2,7 @@ package edu.vt.ece.laice.web.backend.model
 
 import com.vladmihalcea.hibernate.type.json.JsonStringType
 import edu.vt.ece.laice.web.backend.model.audit.UserDateAudit
-import edu.vt.ece.laice.web.backend.packet.CommandPacket
-import org.hibernate.annotations.NaturalId
+import edu.vt.ece.laice.web.backend.packet.SchedulePacket
 import org.hibernate.annotations.Type
 import org.hibernate.annotations.TypeDef
 import org.hibernate.annotations.TypeDefs
@@ -18,12 +17,11 @@ data class Packet(
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         val id: Long = 0L,
 
-        @NaturalId
-        val time: Instant = Instant.EPOCH,
+        val startTime: Instant = Instant.EPOCH,
+
+        val endTime: Instant = Instant.EPOCH,
 
         @Type(type = "json")
         @Column(columnDefinition = "json")
-        val commandPacket: CommandPacket = CommandPacket.NULL,
-
-        val crc32: Long = 0L
-): UserDateAudit()
+        val schedulePacket: SchedulePacket = SchedulePacket.NULL
+        ): UserDateAudit()

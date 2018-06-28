@@ -17,11 +17,12 @@ class ScheduleController {
     @Autowired
     private lateinit var packetRepository: PacketRepository
 
+    /*
     @GetMapping("/all")
     @PreAuthorize("hasRole('VIEW_SCHEDULE')")
     fun getAllPackets(): ResponseEntity<*> {
         val packets = packetRepository.findAll()
-        val response = packets.map { PacketSummaryResponse(it.id, it.time, it.commandPacket.name(), it.createdAt, it.updatedAt, it.createdBy, it.updatedBy) }
+        val response = packets.map { PacketSummaryResponse(it.id, it.startTime, it.commandPacket.name(), it.createdAt, it.updatedAt, it.createdBy, it.updatedBy) }
         return ResponseEntity.ok(response)
     }
 
@@ -29,7 +30,8 @@ class ScheduleController {
     @PreAuthorize("hasRole('VIEW_SCHEDULE')")
     fun getPacket(@PathVariable id: Long): ResponseEntity<*> {
         val packet = packetRepository.findById(id).orElseThrow { ResourceNotFoundException("Packet", "id", id) }
-        val response = PacketSummaryResponse(packet.id, packet.time, packet.commandPacket.name(), packet.createdAt, packet.updatedAt, packet.createdBy, packet.updatedBy)
+        val response = PacketSummaryResponse(packet.id, packet.startTime, packet.commandPacket.name(), packet.createdAt, packet.updatedAt, packet.createdBy, packet.updatedBy)
         return ResponseEntity.ok(response)
     }
+    */
 }

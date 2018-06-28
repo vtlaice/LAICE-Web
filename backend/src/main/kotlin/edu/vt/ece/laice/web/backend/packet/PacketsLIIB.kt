@@ -30,5 +30,13 @@ enum class OpMode(override val bin: String): BinEnum {
 data class CommandLIIB(val startWord: StartWordLIIB = StartWordLIIB.NORMAL_OPERATION_LIIB,
                        val liibMode: LIIBMode,
                        val opMode: OpMode): BinString {
+    companion object {
+        val NULL = CommandLIIB(
+                StartWordLIIB.NULL,
+                LIIBMode.NULL,
+                OpMode.NULL
+        )
+    }
+
     override fun bin() = startWord.bin + liibMode.bin + opMode.bin
 }
