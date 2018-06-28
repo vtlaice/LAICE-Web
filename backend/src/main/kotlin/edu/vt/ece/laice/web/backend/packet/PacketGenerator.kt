@@ -49,7 +49,7 @@ object PacketGenerator {
         val emissionMode: EmissionModeSNeuPI
 
         when (dutyCycleTime) {
-            in 0..dutyCycle.secondsOn() -> {
+            in 0L..dutyCycle.secondsOn() -> {
                 hvStatus = HVStatusSNeuPI.HV_START
                 emissionMode = schedulePacket.emissionModeSneupi
             }
@@ -81,7 +81,7 @@ object PacketGenerator {
                 filamentOnOff = FilamentOnOffLINAS.FILAMENT_ARM //2*96 1
                 filamentOnOff2 = FilamentOnOffLINAS.FILAMENT_ON //2*96 2
             }
-            in 0..dutyCycle.secondsOn() -> {
+            in 0L..dutyCycle.secondsOn() -> {
                 filamentOnOff = FilamentOnOffLINAS.FILAMENT_ON
                 filamentOnOff2 = null
             }
@@ -195,7 +195,7 @@ fun main(args: Array<String>) {
                     false,
                     RG2ModeRPA.APERTURE,
                     SweepModeRPA.LINEAR_SWEEP,
-                    10,
+                    100,
                     FilamentSelectLINAS.FILAMENT_1,
                     CollectorGainStateLINAS.HIGH_PRESSURE_SENSITIVE,
                     0,
@@ -208,6 +208,6 @@ fun main(args: Array<String>) {
     val end = System.nanoTime()
     println("Packet creation took ${end - start} nanos")
     cmdPackets.forEach {
-        println("START: ${it.startTime}  END: ${it.endTime}  BIN: ${it.packet.bin()}")
+        println("START: ${it.startTime}  END: ${it.endTime}  BIN: ${it.packet.crc32()}")
     }
 }
