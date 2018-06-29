@@ -6,23 +6,6 @@ import java.time.temporal.ChronoUnit
 import java.util.*
 
 object PacketGenerator {
-    private fun identifyOpMode(schedulePacket: SchedulePacket): OpMode {
-        val rpa = schedulePacket.rpa
-        val linas = schedulePacket.linas
-        val sneupi = schedulePacket.sneupi
-        return when {
-            (!rpa && !linas && !sneupi) -> OpMode.SAFE
-            (sneupi && !rpa && !linas) -> OpMode.SNEUPI_ON
-            (linas && !rpa && !sneupi) -> OpMode.LINAS_ON
-            (linas && sneupi && !rpa) -> OpMode.NEUTRAL
-            (rpa && !linas && !sneupi) -> OpMode.PLASMA
-            (rpa && sneupi && !linas) -> OpMode.HIGH_RES_CORRELATION
-            (rpa && linas && !sneupi) -> OpMode.LOW_RES_CORRELATION
-            (rpa && linas && sneupi) -> OpMode.PRIME_SCIENCE
-            else -> OpMode.NULL
-        }
-    }
-
     fun createLiibDataAt(time: Long, schedulePacket: SchedulePacket, opMode: OpMode): CommandHolder<CommandLIIB> {
         return CommandHolder(CommandLIIB(
                 liibMode = schedulePacket.liibMode,
@@ -34,15 +17,15 @@ object PacketGenerator {
         if (!schedulePacket.rpa) return CommandHolder(CommandRPA.NULL)
         return CommandHolder(CommandRPA(
                 pointsPerSweep = PointPerSweepRPA.PPS_64,
-                rg2Mode = schedulePacket.rG2ModeRpa,
-                sweepMode = schedulePacket.sweepModeRpa,
+                rg2Mode = schedulePacket.rg2ModeRpa ?: RG2ModeRPA.NULL,
+                sweepMode = schedulePacket.sweepModeRpa ?: SweepModeRPA.NULL,
                 stepSize = if (schedulePacket.sweepModeRpa == SweepModeRPA.CONSTANT_VOLTAGE) StepSizeRPA.ION_TRAP else StepSizeRPA.STEP_SIZE_PPS_64
         ))
     }
 
     fun createSneupiDataAt(time: Long, schedulePacket: SchedulePacket, opMode: OpMode): CommandHolder<CommandSNeuPI> {
         if (!schedulePacket.sneupi) return CommandHolder(CommandSNeuPI.NULL)
-        val dutyCycle = DutyCycleSNeuPI.fromValue(schedulePacket.dutyCycleSneupi)
+        val dutyCycle = DutyCycleSNeuPI.fromValue(schedulePacket.dutyCycleSneupi ?: 0)
         val dutyCycleTime = time % dutyCycle.totalSeconds()
 
         val hvStatus: HVStatusSNeuPI
@@ -51,7 +34,7 @@ object PacketGenerator {
         when (dutyCycleTime) {
             in 0L..dutyCycle.secondsOn() -> {
                 hvStatus = HVStatusSNeuPI.HV_START
-                emissionMode = schedulePacket.emissionModeSneupi
+                emissionMode = schedulePacket.emissionModeSneupi ?: EmissionModeSNeuPI.NULL
             }
             in dutyCycle.secondsOn()..dutyCycle.secondsOff() -> {
                 hvStatus = HVStatusSNeuPI.HV_OFF
@@ -70,7 +53,7 @@ object PacketGenerator {
 
     fun createLinasDataAt(time: Long, schedulePacket: SchedulePacket, opMode: OpMode): CommandHolder<CommandLINAS> {
         if (!schedulePacket.linas) return CommandHolder(CommandLINAS.NULL)
-        val dutyCycle = DutyCycleLINAS.fromValue(schedulePacket.dutyCycleLinas)
+        val dutyCycle = DutyCycleLINAS.fromValue(schedulePacket.dutyCycleLinas ?: 0)
         val dutyCycleTime = time % dutyCycle.totalSeconds()
 
         val filamentOnOff: FilamentOnOffLINAS
@@ -97,26 +80,26 @@ object PacketGenerator {
         if (filamentOnOff2 != null) {
             return CommandHolder(
                     CommandLINAS(
-                            filamentSelect = schedulePacket.filamentSelectLinas,
+                            filamentSelect = schedulePacket.filamentSelectLinas ?: FilamentSelectLINAS.NULL,
                             gridBiasOnOff = GridBiasOnOffLINAS.GRID_BIAS_OFF,
                             gridBiasSetting = GridBiasSettingLINAS.GRID_BIAS_187V,
-                            collectorGainState = schedulePacket.collectorGainStateLinas,
+                            collectorGainState = schedulePacket.collectorGainStateLinas ?: CollectorGainStateLINAS.NULL,
                             filamentOnOff = filamentOnOff
                     ),
                     CommandLINAS(
-                            filamentSelect = schedulePacket.filamentSelectLinas,
+                            filamentSelect = schedulePacket.filamentSelectLinas ?: FilamentSelectLINAS.NULL,
                             gridBiasOnOff = GridBiasOnOffLINAS.GRID_BIAS_OFF,
                             gridBiasSetting = GridBiasSettingLINAS.GRID_BIAS_187V,
-                            collectorGainState = schedulePacket.collectorGainStateLinas,
+                            collectorGainState = schedulePacket.collectorGainStateLinas ?: CollectorGainStateLINAS.NULL,
                             filamentOnOff = filamentOnOff2
                     )
             )
         }
         return CommandHolder(CommandLINAS(
-                filamentSelect = schedulePacket.filamentSelectLinas,
+                filamentSelect = schedulePacket.filamentSelectLinas ?: FilamentSelectLINAS.NULL,
                 gridBiasOnOff = GridBiasOnOffLINAS.GRID_BIAS_OFF,
                 gridBiasSetting = GridBiasSettingLINAS.GRID_BIAS_187V,
-                collectorGainState = schedulePacket.collectorGainStateLinas,
+                collectorGainState = schedulePacket.collectorGainStateLinas ?: CollectorGainStateLINAS.NULL,
                 filamentOnOff = filamentOnOff
         ))
     }
@@ -155,7 +138,7 @@ object PacketGenerator {
         val startTime = packetIn.startTime.plusSeconds(2) //Allocate 2 seconds at the beginning for the duplicate packet
         val endTime = packetIn.endTime
         val schedulePacket = packetIn.schedulePacket
-        val opMode = identifyOpMode(schedulePacket)
+        val opMode = schedulePacket.identifyOpMode()
 
         var currentTime = startTime
         val packets = LinkedList<TimePacketPair>()
@@ -181,33 +164,5 @@ object PacketGenerator {
         populateEndTimes(packets, endTime) //Fill in the end times for each packet
 
         return packets
-    }
-}
-
-fun main(args: Array<String>) {
-    val packet = Packet(
-            startTime = Instant.now(),
-            endTime = Instant.now().plus(21, ChronoUnit.DAYS),
-            schedulePacket = SchedulePacket(
-                    LIIBMode.NORMAL_MODE,
-                    true,
-                    true,
-                    false,
-                    RG2ModeRPA.APERTURE,
-                    SweepModeRPA.LINEAR_SWEEP,
-                    100,
-                    FilamentSelectLINAS.FILAMENT_1,
-                    CollectorGainStateLINAS.HIGH_PRESSURE_SENSITIVE,
-                    0,
-                    EmissionModeSNeuPI.NULL
-            )
-    )
-
-    val start = System.nanoTime()
-    val cmdPackets = PacketGenerator.createCommandPackets(packet)
-    val end = System.nanoTime()
-    println("Packet creation took ${end - start} nanos")
-    cmdPackets.forEach {
-        println("START: ${it.startTime}  END: ${it.endTime}  BIN: ${it.packet.crc32()}")
     }
 }

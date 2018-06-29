@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Switch, Route, withRouter } from 'react-router-dom'
 import Spinner from 'react-spinkit'
+import moment from 'moment'
+import BigCalendar from 'react-big-calendar'
 
 import './App.css';
 import API from "./common/API"
@@ -9,6 +11,8 @@ import HomeRoot from "./home/HomeRoot"
 import PacketBuilderRoot from "./packetBuilder/PacketBuilderRoot"
 import LiibMode from "./common/LiibMode";
 import {SweepModeRPA} from "./common/Modes";
+
+BigCalendar.momentLocalizer(moment);
 
 class App extends Component {
     constructor(props) {

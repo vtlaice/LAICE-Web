@@ -1,5 +1,7 @@
 package edu.vt.ece.laice.web.backend
 
+import edu.vt.ece.laice.web.backend.model.Packet
+import edu.vt.ece.laice.web.backend.packet.*
 import edu.vt.ece.laice.web.backend.repository.PacketRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.SpringBootApplication
@@ -7,6 +9,8 @@ import org.springframework.boot.autoconfigure.domain.EntityScan
 import org.springframework.boot.runApplication
 import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters
 import org.springframework.stereotype.Component
+import java.time.*
+import java.time.temporal.ChronoUnit
 import java.util.*
 import javax.annotation.PostConstruct
 
@@ -31,40 +35,34 @@ class TestComponent {
 
     @PostConstruct
     fun addTestPacket() {
-/*
-        val cmd = SingleCommandPacket(
-                CommandLIIB(
-                        liibMode = LIIBMode.NORMAL_MODE,
-                        opMode = OpMode.PRIME_SCIENCE
-                ),
-                CommandRPA(
-                        stepSize = StepSizeRPA.STEP_SIZE_PPS_64,
-                        pointsPerSweep = PointPerSweepRPA.PPS_64,
-                        rg2Mode = RG2ModeRPA.APERTURE,
-                        sweepMode = SweepModeRPA.LINEAR_SWEEP
-                ),
-                CommandSNeuPI(
-                        hvStatus = HVStatusSNeuPI.HV_START,
-                        emissionMode = EmissionModeSNeuPI.EMISSION_OFF
-                ),
-                CommandLINAS(
-                        filamentSelect = FilamentSelectLINAS.FILAMENT_1,
-                        gridBiasOnOff = GridBiasOnOffLINAS.GRID_BIAS_OFF,
-                        gridBiasSetting = GridBiasSettingLINAS.GRID_BIAS_187V,
-                        collectorGainState = CollectorGainStateLINAS.HIGH_PRESSURE_SENSITIVE,
-                        filamentOnOff = FilamentOnOffLINAS.FILAMENT_ON
+        println(Year.of(2018).atMonth(Month.JANUARY).atEndOfMonth().atTime(23, 59, 59, 999_999_999).toInstant(ZoneOffset.UTC))
+
+        /*
+        val packets = packetRepository.findAllByStartTimeLessThanEqualAndEndTimeGreaterThanEqual(Instant.ofEpochSecond(9000), Instant.ofEpochSecond(100))
+        packets.forEach {
+            println(it)
+        }
+        */
+        /*
+        val packet = Packet(
+                startTime = Instant.now(),
+                endTime = Instant.now().plus(3, ChronoUnit.DAYS),
+                schedulePacket = SchedulePacket(
+                        LIIBMode.NORMAL_MODE,
+                        true,
+                        true,
+                        false,
+                        RG2ModeRPA.RETARDING,
+                        SweepModeRPA.LINEAR_SWEEP,
+                        50,
+                        FilamentSelectLINAS.FILAMENT_1,
+                        CollectorGainStateLINAS.SWITCH_GAIN_STATE,
+                        0,
+                        EmissionModeSNeuPI.NULL
                 )
         )
-        val packet = Packet(startTime = Instant.now(), commandPacket = cmd, crc32 = cmd.crc32())
+
         packetRepository.save(packet)
-        println("ADDED TEST PACKET")
-*/
-
-/*
-        val packet = packetRepository.findById(1).get()
-        println(packet)
-        println("BIN: ${packet.commandPacket.bin()}")
         */
-
     }
 }
