@@ -9,6 +9,10 @@ import org.hibernate.annotations.TypeDefs
 import java.time.Instant
 import javax.persistence.*
 
+/**
+ * Name is somewhat misleading, this entity represents a single *schedule* entry.
+ * From this, multiple "command packets" will be created to fulfill the schedule
+ */
 @TypeDefs(TypeDef(name = "json", typeClass = JsonStringType::class))
 @Entity
 @Table(name = "packets")
@@ -18,10 +22,9 @@ data class Packet(
         val id: Long = 0L,
 
         val startTime: Instant = Instant.EPOCH,
-
         val endTime: Instant = Instant.EPOCH,
 
         @Type(type = "json")
         @Column(columnDefinition = "json")
         val schedulePacket: SchedulePacket = SchedulePacket.NULL
-        ): UserDateAudit()
+): UserDateAudit()

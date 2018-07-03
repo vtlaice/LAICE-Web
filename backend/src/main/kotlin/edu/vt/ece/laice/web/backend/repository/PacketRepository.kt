@@ -9,8 +9,5 @@ import java.time.Instant
 
 @Repository
 interface PacketRepository: JpaRepository<Packet, Long> {
-    fun findByStartTimeBetween(start: Instant, end: Instant): List<Packet>
-    fun findByEndTimeBetween(start: Instant, end: Instant): List<Packet>
-
     fun findAllByStartTimeLessThanEqualAndEndTimeGreaterThanEqual(end: Instant, start: Instant): List<Packet>
 }

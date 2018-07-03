@@ -3,7 +3,7 @@ package edu.vt.ece.laice.web.backend.controller
 import edu.vt.ece.laice.web.backend.exception.ResourceNotFoundException
 import edu.vt.ece.laice.web.backend.model.Packet
 import edu.vt.ece.laice.web.backend.payload.PacketSummaryResponse
-import edu.vt.ece.laice.web.backend.repository.PacketRepository
+import edu.vt.ece.laice.web.backend.service.PacketService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
@@ -20,12 +20,12 @@ import java.time.ZoneOffset
 @RequestMapping("/api/schedule")
 class ScheduleController {
     @Autowired
-    private lateinit var packetRepository: PacketRepository
+    private lateinit var packetService: PacketService
 
     @GetMapping("/all")
     @PreAuthorize("hasRole('VIEW_SCHEDULE')")
     fun getAllPackets(): ResponseEntity<*> {
-        val packets = packetRepository.findAll()
+        val packets = packetService.getAllPackets()
         val response = packets.map { PacketSummaryResponse(it.id, it.startTime, it.endTime, it.schedulePacket.name(), it.createdAt, it.updatedAt, it.createdBy, it.updatedBy) }
         return ResponseEntity.ok(response)
     }
@@ -33,20 +33,15 @@ class ScheduleController {
     @GetMapping("/packet/{id}")
     @PreAuthorize("hasRole('VIEW_SCHEDULE')")
     fun getPacket(@PathVariable id: Long): ResponseEntity<*> {
-        val packet = packetRepository.findById(id).orElseThrow { ResourceNotFoundException("Packet", "id", id) }
+        val packet = packetService.getPacketById(id) ?: throw ResourceNotFoundException("Packet", "id", id)
         val response = PacketSummaryResponse(packet.id, packet.startTime, packet.endTime, packet.schedulePacket.name(), packet.createdAt, packet.updatedAt, packet.createdBy, packet.updatedBy)
         return ResponseEntity.ok(response)
     }
 
     @GetMapping("/calendarPage/{month}/{year}")
     @PreAuthorize("hasRole('VIEW_SCHEDULE')")
-    fun getPacketsForMonth(@PathVariable year: Int, @PathVariable month: Int): ResponseEntity<*> {
-        val monthObj = Month.of(month)
-        val yearObj = Year.of(year)
-        val startOfMonth = yearObj.atMonth(monthObj).atDay(1).atStartOfDay().toInstant(ZoneOffset.UTC)
-        val endOfMonth = yearObj.atMonth(monthObj).atEndOfMonth().atTime(23, 59, 59, 999_999_999).toInstant(ZoneOffset.UTC)
-
-        val packets = packetRepository.findAllByStartTimeLessThanEqualAndEndTimeGreaterThanEqual(endOfMonth, startOfMonth)
+    fun getPacketsForMonth(@PathVariable month: Int, @PathVariable year: Int): ResponseEntity<*> {
+        val packets = packetService.getPacketsForMonth(month, year)
 
         val response = packets.map { PacketSummaryResponse(it.id, it.startTime, it.endTime, it.schedulePacket.name(), it.createdAt, it.updatedAt, it.createdBy, it.updatedBy) }
         return ResponseEntity.ok(response)

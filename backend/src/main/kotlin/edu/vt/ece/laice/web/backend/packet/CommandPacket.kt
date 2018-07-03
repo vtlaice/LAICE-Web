@@ -8,4 +8,14 @@ interface CommandPacket: BinString {
         crc.update(bin().toByteArray())
         return crc.value
     }
+
+    /**
+     * Quick fix to UIUC requiring 2 strings for each state change.
+     * This will expand a single packet to a double packet if it isn't one already
+     */
+    fun expand(): DoubleCommandPacket {
+        if (this is DoubleCommandPacket) return this
+        if (this is SingleCommandPacket) return DoubleCommandPacket(this, this)
+        throw UnsupportedOperationException("Invalid command packet type")
+    }
 }

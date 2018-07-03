@@ -107,24 +107,21 @@ object PacketGenerator {
     private fun createPacket(commandLiib: CommandHolder<CommandLIIB>,
                              commandRpa: CommandHolder<CommandRPA>,
                              commandSneupi: CommandHolder<CommandSNeuPI>,
-                             commandLinas: CommandHolder<CommandLINAS>): CommandPacket {
-        if (commandLiib.isDouble() || commandRpa.isDouble() || commandSneupi.isDouble() || commandLinas.isDouble()) {
-            return DoubleCommandPacket(
-                    SingleCommandPacket(
-                            commandLiib.first,
-                            commandRpa.first,
-                            commandSneupi.first,
-                            commandLinas.first
-                    ),
-                    SingleCommandPacket(
-                            commandLiib.second ?: commandLiib.first,
-                            commandRpa.second ?: commandRpa.first,
-                            commandSneupi.second ?: commandSneupi.first,
-                            commandLinas.second ?: commandLinas.first
-                    )
-            )
-        }
-        return SingleCommandPacket(commandLiib.first, commandRpa.first, commandSneupi.first, commandLinas.first)
+                             commandLinas: CommandHolder<CommandLINAS>): DoubleCommandPacket {
+        return DoubleCommandPacket(
+                SingleCommandPacket(
+                        commandLiib.first,
+                        commandRpa.first,
+                        commandSneupi.first,
+                        commandLinas.first
+                ),
+                SingleCommandPacket(
+                        commandLiib.second ?: commandLiib.first,
+                        commandRpa.second ?: commandRpa.first,
+                        commandSneupi.second ?: commandSneupi.first,
+                        commandLinas.second ?: commandLinas.first
+                )
+        )
     }
 
     private fun populateEndTimes(packets: List<TimePacketPair>, scheduleEnd: Instant) {
