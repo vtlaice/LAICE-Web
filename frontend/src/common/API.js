@@ -43,7 +43,7 @@ class API {
 
     static getPacketsForMonth(month, year) {
         return this.request({
-            url: "/api/schedule/calendarPage" + month + "/" + year,
+            url: "/api/schedule/calendarPage/" + month + "/" + year,
             method: "GET"
         })
     }

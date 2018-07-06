@@ -9,8 +9,7 @@ import API from "./common/API"
 import MainNavbar from "./common/MainNavbar";
 import HomeRoot from "./home/HomeRoot"
 import PacketBuilderRoot from "./packetBuilder/PacketBuilderRoot"
-import LiibMode from "./common/LiibMode";
-import {SweepModeRPA} from "./common/Modes";
+import ScheduleViewerRoot from "./scheduleViewer/ScheduleViewerRoot"
 
 BigCalendar.momentLocalizer(moment);
 
@@ -77,6 +76,7 @@ class App extends Component {
           <Switch>
               <Route exact path="/" render={(props) => <HomeRoot/>}/>
               <Route path="/packetBuilder" render={(props) => <PacketBuilderRoot/>}/>
+              <Route path="/scheduleViewer" render={(props) => <ScheduleViewerRoot/>}/>
           </Switch>
       </div>
     );

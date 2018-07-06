@@ -28,7 +28,7 @@ class MainNavbar extends Component {
         const request = {  }
     }
 
-    createNavItem(name, page, doRender, exact = false) {
+    createNavItem(name, page, doRender = true, exact = false) {
         if (!doRender) return null;
         return (
             <NavItem>
@@ -70,6 +70,7 @@ class MainNavbar extends Component {
                     <NavbarBrand href="/">LAICE</NavbarBrand>
                     <Nav className="mr-auto" navbar>
                         {this.createNavItem("Home", "/", true, true)}
+                        {this.createNavItem("Schedule Viewer", "/scheduleViewer") /* TODO change to secure nav item */}
                         {this.createSecureNavItem("Packet Builder", "/packetBuilder", "ROLE_VIEW_SCHEDULE")}
                     </Nav>
                     <Nav className="ml-auto" navbar>
