@@ -21,7 +21,7 @@ class PacketController {
     fun schedulePacket(@RequestBody request: SchedulePacketRequest) {
         val packet = Packet(
                 startTime = request.startTime,
-                endTime = request.endTime,
+                endTime = request.startTime,
                 schedulePacket = request.schedulePacket
         )
 

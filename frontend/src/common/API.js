@@ -47,6 +47,18 @@ class API {
             method: "GET"
         })
     }
+
+    static schedulePacket(startTime, endTime, packet) {
+        return this.request({
+            url: "/api/packet/schedulePacket",
+            method: "POST",
+            body: JSON.stringify({
+                startTime: startTime,
+                endTime: endTime,
+                schedulePacket: packet
+            })
+        })
+    }
 }
 
 

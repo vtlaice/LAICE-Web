@@ -14,6 +14,8 @@
     "react-router-dom": "^4.3.1",
     "react-scripts": "1.1.4",
     "react-spinkit": "^3.0.0",
+    "react-widgets": "^4.4.3",
+    "react-widgets-moment": "^4.0.19",
     "reactstrap": "^6.1.0"
   },
   "scripts": {

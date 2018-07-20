@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { Switch, Route, withRouter } from 'react-router-dom'
 import Spinner from 'react-spinkit'
-import moment from 'moment'
+import Moment from 'moment'
 import BigCalendar from 'react-big-calendar'
+import momentLocalizer from 'react-widgets-moment'
 
 import './App.css';
 import API from "./common/API"
@@ -11,7 +12,10 @@ import HomeRoot from "./home/HomeRoot"
 import PacketBuilderRoot from "./packetBuilder/PacketBuilderRoot"
 import ScheduleViewerRoot from "./scheduleViewer/ScheduleViewerRoot"
 
-BigCalendar.momentLocalizer(moment);
+Moment.locale('en');
+
+BigCalendar.momentLocalizer(Moment);
+momentLocalizer();
 
 class App extends Component {
     constructor(props) {

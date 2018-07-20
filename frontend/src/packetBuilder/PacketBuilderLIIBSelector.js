@@ -22,7 +22,7 @@ class PacketBuilderLIIBSelector extends Component {
         return (
             <div>
                 <ButtonGroupControl size="md" name="LIIB Mode" onChange={this.onBtn} selected={this.state.selected}>
-                    <Button color="success" value={LiibMode.NORMAL}>Normal</Button>
+                    <Button color="success" value={LiibMode.NORMAL_MODE}>Normal</Button>
                     <Button color="warning" value={LiibMode.TK1_CHARGE}>TK1 Charge</Button>
                     <Button color="warning" value={LiibMode.TK1_DISCHARGE}>TK1 Discharge</Button>
                     <Button color="warning" value={LiibMode.TK2_CHARGE}>TK2 Charge</Button>

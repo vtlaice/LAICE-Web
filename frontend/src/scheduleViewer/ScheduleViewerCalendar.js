@@ -7,10 +7,19 @@ class ScheduleViewerCalendar extends Component {
         super(props);
 
         this.state = {
-            events: []
+            events: [],
+
+            selectable: props.selectable || false,
+            editable: props.editable || false
         };
 
         this.updateDate = this.updateDate.bind(this);
+        this.createEventList = this.createEventList.bind(this);
+    }
+
+    componentDidMount() {
+        const now = new Date();
+        this.updateDate(now);
     }
 
     updateDate(date) {
@@ -26,11 +35,20 @@ class ScheduleViewerCalendar extends Component {
         });
     }
 
+    createEventList() {
+        if (this.props.potentialEvent) {
+            return [...this.state.events, this.props.potentialEvent];
+        } else {
+            return this.state.events;
+        }
+    }
+
     render() {
         return (
-            <div style={{width: 1000, height: 800}}>
+            <div style={{width: 800, height: 600}}>
                 <BigCalendar
-                events={this.state.events}
+                selectable={this.state.selectable}
+                events={this.createEventList()}
                 titleAccessor={(e) => {
                     return e.name.toString()
                 }}
@@ -41,6 +59,15 @@ class ScheduleViewerCalendar extends Component {
                     return new Date(e.endTime)
                 }}
                 onNavigate={this.updateDate}
+                eventPropGetter={
+                    (event, start, end, isSelected) => {
+                        if (event.potential) {
+                            return {style: {backgroundColor: "#DBA901"}};
+                        } else {
+                            return {};
+                        }
+                    }
+                }
                 />
             </div>
         );

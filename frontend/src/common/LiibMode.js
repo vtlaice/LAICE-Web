@@ -1,6 +1,6 @@
 class LiibMode {
     static NONE = 'NONE';
-    static NORMAL = 'NORMAL';
+    static NORMAL_MODE = 'NORMAL_MODE';
     static TK1_CHARGE = 'TK1_CHARGE';
     static TK1_DISCHARGE = 'TK1_DISCHARGE';
     static TK2_CHARGE = 'TK2_CHARGE';
