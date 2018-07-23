@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Card, CardHeader, CardTitle, CardBody, CardText, Fade } from 'reactstrap'
+import { Card, CardHeader, CardTitle, CardBody, CardText, Fade, Button } from 'reactstrap'
 import ScheduleViewerCalendar from './ScheduleViewerCalendar'
 
 class ScheduleViewerRoot extends Component {
@@ -17,6 +17,9 @@ class ScheduleViewerRoot extends Component {
                         </CardHeader>
                         <CardBody>
                             <ScheduleViewerCalendar/>
+                            <div className="d-flex flex-fill pt-3">
+                                <div className="ml-auto"><Button color="secondary">Export to CSV</Button></div>
+                            </div>
                         </CardBody>
                     </Card>
                 </Fade>

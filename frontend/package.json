@@ -11,6 +11,7 @@
     "react": "^16.4.0",
     "react-big-calendar": "^0.19.2",
     "react-dom": "^16.4.0",
+    "react-notifications": "^1.4.3",
     "react-router-dom": "^4.3.1",
     "react-scripts": "1.1.4",
     "react-spinkit": "^3.0.0",

@@ -4,6 +4,7 @@ import Spinner from 'react-spinkit'
 import Moment from 'moment'
 import BigCalendar from 'react-big-calendar'
 import momentLocalizer from 'react-widgets-moment'
+import { NotificationContainer, NotificationManager } from 'react-notifications'
 
 import './App.css';
 import API from "./common/API"
@@ -56,6 +57,8 @@ class App extends Component {
             isAuthenticated: false
         });
 
+        NotificationManager.info("Logged out successfully", "Authentication");
+
         this.props.history.push("/");
     }
 
@@ -82,6 +85,7 @@ class App extends Component {
               <Route path="/packetBuilder" render={(props) => <PacketBuilderRoot/>}/>
               <Route path="/scheduleViewer" render={(props) => <ScheduleViewerRoot/>}/>
           </Switch>
+          <NotificationContainer/>
       </div>
     );
   }

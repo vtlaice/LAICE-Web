@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Fade, Card, CardBody, CardHeader, CardTitle, CardText, ButtonGroup, Button, Container, Row, Col } from 'reactstrap'
 import { withRouter } from 'react-router-dom'
+import { NotificationManager } from 'react-notifications'
 import LiibMode from '../common/LiibMode'
 import PacketBuilderLIIBSelector from './PacketBuilderLIIBSelector'
 import PacketBuilderRPAModeSelector from './PacketBuilderRPAModeSelector'
@@ -128,9 +129,12 @@ class PacketBuilderRoot extends Component {
                 dutyCycleSneupi: this.state.dutyCycleSneupi,
                 emissionModeSneupi: this.state.emissionModeSneupi
             }
-        ).then(() => {
-            this.props.history.push("/scheduleViewer")
+        ).then((response) => {
+            NotificationManager.success(response.message, "Packet Builder");
+            this.props.history.push("/");
+            this.props.history.push("/packetBuilder"); //Reload the component
         }).catch((error) => {
+            NotificationManager.error("Error scheduling packet", "Packet Builder");
             console.log(error)
         });
     }
@@ -206,4 +210,4 @@ class PacketBuilderRoot extends Component {
     }
 }
 
-export default withRouter(PacketBuilderRoot)
+export default withRouter(PacketBuilderRoot);

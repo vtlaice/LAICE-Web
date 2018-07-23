@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 import 'react-widgets/dist/css/react-widgets.css';
+import 'react-notifications/lib/notifications.css';
 import './index.css';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
