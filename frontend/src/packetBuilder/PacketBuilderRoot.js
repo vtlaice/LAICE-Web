@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Fade, Card, CardBody, CardHeader, CardTitle, CardText, ButtonGroup, Button, Container, Row, Col } from 'reactstrap'
+import { Fade, Card, CardBody, CardHeader, CardTitle, CardText, ButtonGroup, Button, Container, Row, Col, Alert } from 'reactstrap'
 import { withRouter } from 'react-router-dom'
 import { NotificationManager } from 'react-notifications'
 import LiibMode from '../common/LiibMode'
@@ -30,7 +30,9 @@ class PacketBuilderRoot extends Component {
             startDate: props.startDate || null,
             endDate: props.endDate || null,
 
-            calendarPage: props.calendarPage || false
+            calendarPage: props.calendarPage || false,
+            packetErrors: [],
+            scheduleErrors: []
         };
 
         this.updateLiibMode = this.updateLiibMode.bind(this);
@@ -49,6 +51,8 @@ class PacketBuilderRoot extends Component {
         this.onScheduleButton = this.onScheduleButton.bind(this);
         this.onBackButton = this.onBackButton.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
+        this.identifyPacketErrors = this.identifyPacketErrors.bind(this);
+        this.identifyScheduleErrors = this.identifyScheduleErrors.bind(this);
     }
 
     updateLiibMode(mode) {
@@ -105,38 +109,75 @@ class PacketBuilderRoot extends Component {
 
 
     onScheduleButton() {
-        this.setState({calendarPage: true});
+        if (this.identifyPacketErrors()) {
+            this.setState({calendarPage: true});
+        }
     }
 
     onBackButton() {
         this.setState({calendarPage: false});
     }
 
-    onSubmit() {
-        API.schedulePacket(
-            this.state.startDate,
-            this.state.endDate,
-            {
-                liibMode: this.state.liibMode,
-                rpa: this.state.rpa,
-                linas: this.state.linas,
-                sneupi: this.state.sneupi,
-                rg2ModeRpa: this.state.rg2ModeRpa,
-                sweepModeRpa: this.state.sweepModeRpa,
-                dutyCycleLinas: this.state.dutyCycleLinas,
-                filamentSelectLinas: this.state.filamentSelectLinas,
-                collectorGainStateLinas: this.state.collectorGainStateLinas,
-                dutyCycleSneupi: this.state.dutyCycleSneupi,
-                emissionModeSneupi: this.state.emissionModeSneupi
+    identifyPacketErrors() {
+        const errors = [];
+        if (!this.state.liibMode) errors.push("liibMode");
+
+        if (this.state.liibMode === LiibMode.NORMAL_MODE) {
+            if (this.state.rpa) {
+                if (!this.state.rg2ModeRpa) errors.push("rg2ModeRpa");
+                if (!this.state.sweepModeRpa) errors.push("sweepModeRpa");
             }
-        ).then((response) => {
-            NotificationManager.success(response.message, "Packet Builder");
-            this.props.history.push("/");
-            this.props.history.push("/packetBuilder"); //Reload the component
-        }).catch((error) => {
-            NotificationManager.error("Error scheduling packet", "Packet Builder");
-            console.log(error)
+            if (this.state.linas) {
+                if (!this.state.dutyCycleLinas) errors.push("dutyCycleLinas");
+                if (!this.state.filamentSelectLinas) errors.push("filamentSelectLinas");
+                if (!this.state.collectorGainStateLinas) errors.push("collectorGainStateLinas");
+            }
+            if (this.state.sneupi) {
+                if (!this.state.dutyCycleSneupi) errors.push("dutyCycleSneupi");
+                if (!this.state.emissionModeSneupi) errors.push("emissionModeSneupi");
+            }
+        }
+
+        this.setState({
+            packetErrors: errors
         });
+
+        return errors.length === 0;
+    }
+
+    identifyScheduleErrors() {
+        const errors = [];
+
+        return errors.length === 0;
+    }
+
+    onSubmit() {
+        if (this.identifyScheduleErrors()) {
+            API.schedulePacket(
+                this.state.startDate,
+                this.state.endDate,
+                {
+                    liibMode: this.state.liibMode,
+                    rpa: this.state.rpa,
+                    linas: this.state.linas,
+                    sneupi: this.state.sneupi,
+                    rg2ModeRpa: this.state.rg2ModeRpa,
+                    sweepModeRpa: this.state.sweepModeRpa,
+                    dutyCycleLinas: this.state.dutyCycleLinas,
+                    filamentSelectLinas: this.state.filamentSelectLinas,
+                    collectorGainStateLinas: this.state.collectorGainStateLinas,
+                    dutyCycleSneupi: this.state.dutyCycleSneupi,
+                    emissionModeSneupi: this.state.emissionModeSneupi
+                }
+            ).then((response) => {
+                NotificationManager.success(response.message, "Packet Builder");
+                this.props.history.push("/");
+                this.props.history.push("/packetBuilder"); //Reload the component
+            }).catch((error) => {
+                NotificationManager.error("Error scheduling packet", "Packet Builder");
+                console.log(error)
+            });
+        }
     }
 
     render() {
@@ -150,7 +191,7 @@ class PacketBuilderRoot extends Component {
                         <CardBody>
                             {!this.state.calendarPage &&
                                 <Fade in>
-                                    <PacketBuilderLIIBSelector updateLiibMode={this.updateLiibMode} selected={this.state.liibMode}/>
+                                    <PacketBuilderLIIBSelector updateLiibMode={this.updateLiibMode} selected={this.state.liibMode} errors={this.state.packetErrors}/>
                                     {this.state.liibMode === LiibMode.NORMAL_MODE &&
                                         <Fade in>
                                             <div className="d-flex">
@@ -161,6 +202,7 @@ class PacketBuilderRoot extends Component {
                                                     onActive={this.updateRpa}
                                                     onRg2Mode={this.updateRg2ModeRpa}
                                                     onSweepMode={this.updateSweepModeRpa}
+                                                    errors={this.state.packetErrors}
                                                 />
                                                 <PacketBuilderLINASModeSelector
                                                     active={this.state.linas}
@@ -171,6 +213,7 @@ class PacketBuilderRoot extends Component {
                                                     onDutyCycle={this.updateDutyCycleLinas}
                                                     onFilamentSelect={this.updateFilamentSelectlinas}
                                                     onCollectorGainState={this.updateCollectorGainStateLinas}
+                                                    errors={this.state.packetErrors}
                                                 />
                                                 <PacketBuilderSNeuPIModeSelector
                                                     active={this.state.sneupi}
@@ -179,11 +222,15 @@ class PacketBuilderRoot extends Component {
                                                     onActive={this.updateSneupi}
                                                     onDutyCycle={this.updateDutyCycleSneupi}
                                                     onEmissionMode={this.updateEmissionModeSneupi}
+                                                    errors={this.state.packetErrors}
                                                 />
                                             </div>
                                         </Fade>
                                     }
-                                    {this.state.liibMode !== LiibMode.NONE && <div className="pt-5 text-right"><Button color="success" onClick={this.onScheduleButton}>Schedule Packet</Button></div>}
+                                    <div className="pt-5">
+                                        {this.state.packetErrors.length !== 0 && <Alert color="danger">Please correct all errors before submitting</Alert>}
+                                        {this.state.liibMode !== LiibMode.NONE && <div className="text-right"><Button color="success" onClick={this.onScheduleButton}>Schedule Packet</Button></div>}
+                                    </div>
                                 </Fade>
                             }
 
@@ -194,6 +241,7 @@ class PacketBuilderRoot extends Component {
                                         endDate={this.state.endDate}
                                         onStartDate={this.updateStartDate}
                                         onEndDate={this.updateEndDate}
+                                        errors={this.state.scheduleErrors}
                                     />
                                     <div className="d-flex flex-fill pt-3">
                                         <div className="p-2"><Button color="danger" onClick={this.onBackButton}>Back</Button></div>

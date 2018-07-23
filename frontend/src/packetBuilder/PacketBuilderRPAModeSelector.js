@@ -45,13 +45,13 @@ class PacketBuilderRPAModeSelector extends Component {
             <div className="pt-3 d-flex">
                 <ListControl name="RPA" active={this.state.active} onChange={this.onList}>
                     <ListGroupItem>
-                        <ButtonGroupControl className="d-flex justify-content-center" size="md" name="RG2 Mode" selected={this.state.rg2Mode} onChange={this.onRg2Btn} vertical>
+                        <ButtonGroupControl className="d-flex justify-content-center" size="md" name="RG2 Mode" selected={this.state.rg2Mode} onChange={this.onRg2Btn} vertical error={this.props.errors.includes("rg2ModeRpa")}>
                             <Button color="primary" value={RG2ModeRPA.RETARDING}>Retarding</Button>
                             <Button color="primary" value={RG2ModeRPA.APERTURE}>Aperture</Button>
                         </ButtonGroupControl>
                     </ListGroupItem>
                     <ListGroupItem>
-                        <ButtonGroupControl className="d-flex justify-content-center" size="md" name="Sweep Mode" selected={this.state.sweepMode} onChange={this.onSweepBtn} vertical>
+                        <ButtonGroupControl className="d-flex justify-content-center" size="md" name="Sweep Mode" selected={this.state.sweepMode} onChange={this.onSweepBtn} vertical error={this.props.errors.includes("sweepModeRpa")}>
                             <Button color="primary" value={SweepModeRPA.LINEAR_SWEEP}>Linear Sweep</Button>
                             <Button color="primary" value={SweepModeRPA.CONSTANT_VOLTAGE}>Constant Voltage</Button>
                             <Button color="primary" value={SweepModeRPA.SMART_SWEEP}>Smart Sweep</Button>

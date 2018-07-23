@@ -45,7 +45,7 @@ class PacketBuilderSNeuPIModeSelector extends Component {
             <div className="pt-3 pl-3 d-flex">
                 <ListControl name="SNeuPI" active={this.state.active} onChange={this.onList}>
                     <ListGroupItem>
-                        <ButtonGroupControl className="d-flex justify-content-center" size="md" name="Duty Cycle" selected={this.state.dutyCycle} onChange={this.onDutyCycleBtn}>
+                        <ButtonGroupControl className="d-flex justify-content-center" size="md" name="Duty Cycle" selected={this.state.dutyCycle} onChange={this.onDutyCycleBtn} error={this.props.errors.includes("dutyCycleSneupi")}>
                             <Button color="primary" value={10}>10%</Button>
                             <Button color="primary" value={20}>20%</Button>
                             <Button color="primary" value={50}>50%</Button>
@@ -53,7 +53,7 @@ class PacketBuilderSNeuPIModeSelector extends Component {
                         </ButtonGroupControl>
                     </ListGroupItem>
                     <ListGroupItem>
-                        <ButtonGroupControl className="d-flex justify-content-center" size="md" name="Emission Mode" selected={this.state.emissionMode} onChange={this.onEmissionModeBtn} vertical>
+                        <ButtonGroupControl className="d-flex justify-content-center" size="md" name="Emission Mode" selected={this.state.emissionMode} onChange={this.onEmissionModeBtn} vertical error={this.props.errors.includes("emissionModeSneupi")}>
                             <Button color="primary" value={EmissionModeSNeuPI.SWEEP_EMISSION}>Sweep Emission</Button>
                             <Button color="primary" value={EmissionModeSNeuPI.EMISSION_OFF}>Emission Off</Button>
                             <Button color="primary" value={EmissionModeSNeuPI.EMISSION_LEVEL_A}>Emission Level A</Button>
