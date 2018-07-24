@@ -22,6 +22,8 @@ class PacketService {
         return packetRepository.findById(id).orElseGet { null } //Convert an Optional to a Kotlin nullable
     }
 
+    fun savePacket(packet: Packet) = packetRepository.save(packet)
+
     /**
      * Fetches all of the packets whose times span between the given start or end time.
      * This includes packets that both start and/or end outside of the time range, but cross through it.

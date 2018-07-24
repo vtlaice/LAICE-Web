@@ -20,7 +20,7 @@ class PacketController {
     private lateinit var packetRepository: PacketRepository
 
     @PostMapping("/schedulePacket")
-    @PreAuthorize("hasRole('VIEW_SCHEDULE')") //TODO change back to SCHEDULE_PACKET
+    @PreAuthorize("hasRole('SCHEDULE_PACKET')")
     fun schedulePacket(@RequestBody request: SchedulePacketRequest): ResponseEntity<*> {
         if (!Intrinsics.verifyTimeRange(request.startTime, request.endTime)) {
             return ResponseEntity.badRequest().body(ApiResponse(false, "End time is not after start time"))

@@ -70,8 +70,8 @@ class MainNavbar extends Component {
                     <NavbarBrand href="/">LAICE</NavbarBrand>
                     <Nav className="mr-auto" navbar>
                         {this.createNavItem("Home", "/", true, true)}
-                        {this.createNavItem("Schedule Viewer", "/scheduleViewer") /* TODO change to secure nav item */}
-                        {this.createSecureNavItem("Packet Builder", "/packetBuilder", "ROLE_VIEW_SCHEDULE")}
+                        {this.createSecureNavItem("Schedule Viewer", "/scheduleViewer", "ROLE_VIEW_SCHEDULE")}
+                        {this.createSecureNavItem("Packet Builder", "/packetBuilder", "ROLE_SCHEDULE_PACKET")}
                     </Nav>
                     <Nav className="ml-auto" navbar>
                         {this.createLoginLogoutComponent()}

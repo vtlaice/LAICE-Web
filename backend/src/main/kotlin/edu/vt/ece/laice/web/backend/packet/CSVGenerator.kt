@@ -12,8 +12,12 @@ object CSVGenerator {
         return "${pair.packet.first.crc32()},${pair.packet.second.crc32()},${pair.getDuration()}"
     }
 
-    fun createCSVLines(packet: Packet): List<String> {
+    fun createCSVLines(packet: Packet): String {
         val pairs = PacketGenerator.createCommandPackets(packet)
-        return pairs.map { createCSVLine(it) }
+        val sb = StringBuilder()
+        pairs.forEach {
+            sb.appendln(createCSVLine(it))
+        }
+        return sb.toString()
     }
 }

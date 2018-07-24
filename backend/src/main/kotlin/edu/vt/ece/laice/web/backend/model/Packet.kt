@@ -19,12 +19,14 @@ import javax.persistence.*
 data class Packet(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
-        val id: Long = 0L,
+        var id: Long = 0L,
 
-        val startTime: Instant = Instant.EPOCH,
-        val endTime: Instant = Instant.EPOCH,
+        var startTime: Instant = Instant.EPOCH,
+        var endTime: Instant = Instant.EPOCH,
 
         @Type(type = "json")
         @Column(columnDefinition = "json")
-        val schedulePacket: SchedulePacket = SchedulePacket.NULL
+        var schedulePacket: SchedulePacket = SchedulePacket.NULL,
+
+        var exported: Boolean = false
 ): UserDateAudit()

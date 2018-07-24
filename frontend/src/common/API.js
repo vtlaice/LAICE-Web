@@ -59,6 +59,13 @@ class API {
             })
         })
     }
+
+    static exportPacket(packet) {
+        return this.request({
+            url: "/api/schedule/export/" + packet,
+            method: "GET"
+        })
+    }
 }
 
 

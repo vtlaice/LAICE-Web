@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import BigCalendar from 'react-big-calendar'
 import API from '../common/API'
+import ScheduleViewerEventModal from "./ScheduleViewerEventModal";
 
 class ScheduleViewerCalendar extends Component {
     constructor(props) {
@@ -10,11 +11,14 @@ class ScheduleViewerCalendar extends Component {
             events: [],
 
             selectable: props.selectable || false,
-            editable: props.editable || false
+            editable: props.editable || false,
+
+            selectedEvent: null
         };
 
         this.updateDate = this.updateDate.bind(this);
         this.createEventList = this.createEventList.bind(this);
+        this.onToggleModal = this.onToggleModal.bind(this);
     }
 
     componentDidMount() {
@@ -43,32 +47,54 @@ class ScheduleViewerCalendar extends Component {
         }
     }
 
+    onToggleModal(newState) {
+        if (!newState) {
+            this.setState({
+                selectedEvent: null
+            });
+        }
+    }
+
     render() {
         return (
             <div style={{width: 800, height: 600}}>
                 <BigCalendar
-                selectable={this.state.selectable}
-                events={this.createEventList()}
-                titleAccessor={(e) => {
-                    return e.name.toString()
-                }}
-                startAccessor={(e) => {
-                    return new Date(e.startTime)
-                }}
-                endAccessor={(e) => {
-                    return new Date(e.endTime)
-                }}
-                onNavigate={this.updateDate}
-                eventPropGetter={
-                    (event, start, end, isSelected) => {
-                        if (event.potential) {
-                            return {style: {backgroundColor: "#DBA901"}};
-                        } else {
-                            return {};
+                    events={this.createEventList()}
+                    titleAccessor={(e) => {
+                        return e.name.toString()
+                    }}
+                    startAccessor={(e) => {
+                        return new Date(e.startTime)
+                    }}
+                    endAccessor={(e) => {
+                        return new Date(e.endTime)
+                    }}
+                    onNavigate={this.updateDate}
+                    eventPropGetter={
+                        (event, start, end, isSelected) => {
+                            if (event.potential) {
+                                return {style: {backgroundColor: "#DBA901"}};
+                            } else {
+                                return {};
+                            }
                         }
                     }
-                }
+                    selected={this.state.selectedEvent}
+                    onSelectEvent={
+                        (event, e) => {
+                            this.setState({
+                                selectedEvent: event
+                            })
+                        }
+                    }
                 />
+
+                {this.state.selectedEvent !== null &&
+                <ScheduleViewerEventModal
+                    packet={this.state.selectedEvent}
+                    onToggleModal={this.onToggleModal}
+                />
+                }
             </div>
         );
     }

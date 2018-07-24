@@ -81,9 +81,9 @@ class App extends Component {
                       onLogout={this.handleLogout}
           />
           <Switch>
-              <Route exact path="/" render={(props) => <HomeRoot/>}/>
-              <Route path="/packetBuilder" render={(props) => <PacketBuilderRoot/>}/>
-              <Route path="/scheduleViewer" render={(props) => <ScheduleViewerRoot/>}/>
+              <Route exact path="/" render={(props) => <HomeRoot isAuthenticated={this.state.isAuthenticated} currentUser={this.state.currentUser}/>}/>
+              <Route path="/packetBuilder" render={(props) => <PacketBuilderRoot isAuthenticated={this.state.isAuthenticated} currentUser={this.state.currentUser}/>}/>
+              <Route path="/scheduleViewer" render={(props) => <ScheduleViewerRoot isAuthenticated={this.state.isAuthenticated} currentUser={this.state.currentUser}/>}/>
           </Switch>
           <NotificationContainer/>
       </div>
