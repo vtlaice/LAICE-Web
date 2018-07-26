@@ -60,6 +60,18 @@ class API {
         })
     }
 
+    static updatePacket(startTime, endTime, packet, id) {
+        return this.request({
+            url: "/api/packet/updatePacket/" + id,
+            method: "POST",
+            body: JSON.stringify({
+                startTime: startTime,
+                endTime: endTime,
+                schedulePacket: packet
+            })
+        })
+    }
+
     static exportPacket(packet) {
         return this.request({
             url: "/api/schedule/export/" + packet,

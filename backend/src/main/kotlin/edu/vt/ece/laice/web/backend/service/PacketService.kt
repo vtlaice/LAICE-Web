@@ -44,4 +44,13 @@ class PacketService {
 
         return getPacketsInTimeRange(startOfMonth, endOfMonth)
     }
+
+    /**
+     * Checks if a potential packet overlaps existing packets, inclusive
+     * Returns true if the specified time range overlaps any existing packets
+     */
+    fun packetDoesOverlap(startTime: Instant, endTime: Instant): Boolean {
+        val inRange = getPacketsInTimeRange(startTime, endTime)
+        return inRange.isNotEmpty()
+    }
 }

@@ -153,30 +153,58 @@ class PacketBuilderRoot extends Component {
 
     onSubmit() {
         if (this.identifyScheduleErrors()) {
-            API.schedulePacket(
-                this.state.startDate,
-                this.state.endDate,
-                {
-                    liibMode: this.state.liibMode,
-                    rpa: this.state.rpa,
-                    linas: this.state.linas,
-                    sneupi: this.state.sneupi,
-                    rg2ModeRpa: this.state.rg2ModeRpa,
-                    sweepModeRpa: this.state.sweepModeRpa,
-                    dutyCycleLinas: this.state.dutyCycleLinas,
-                    filamentSelectLinas: this.state.filamentSelectLinas,
-                    collectorGainStateLinas: this.state.collectorGainStateLinas,
-                    dutyCycleSneupi: this.state.dutyCycleSneupi,
-                    emissionModeSneupi: this.state.emissionModeSneupi
-                }
-            ).then((response) => {
-                NotificationManager.success(response.message, "Packet Builder");
-                this.props.history.push("/");
-                this.props.history.push("/packetBuilder"); //Reload the component
-            }).catch((error) => {
-                NotificationManager.error("Error scheduling packet", "Packet Builder");
-                console.log(error)
-            });
+            if (this.props.updateMode) {
+                API.updatePacket(
+                    this.state.startDate,
+                    this.state.endDate,
+                    {
+                        liibMode: this.state.liibMode,
+                        rpa: this.state.rpa,
+                        linas: this.state.linas,
+                        sneupi: this.state.sneupi,
+                        rg2ModeRpa: this.state.rg2ModeRpa,
+                        sweepModeRpa: this.state.sweepModeRpa,
+                        dutyCycleLinas: this.state.dutyCycleLinas,
+                        filamentSelectLinas: this.state.filamentSelectLinas,
+                        collectorGainStateLinas: this.state.collectorGainStateLinas,
+                        dutyCycleSneupi: this.state.dutyCycleSneupi,
+                        emissionModeSneupi: this.state.emissionModeSneupi
+                    },
+                    this.props.updateId
+                ).then((response) => {
+                    NotificationManager.success(response.message, "Packet Builder");
+                    this.props.history.push("/");
+                    this.props.history.push("/packetBuilder");
+                }).catch((error) => {
+                    NotificationManager.error("Error updating packet", "Packet Builder");
+                    console.log(error);
+                })
+            } else {
+                API.schedulePacket(
+                    this.state.startDate,
+                    this.state.endDate,
+                    {
+                        liibMode: this.state.liibMode,
+                        rpa: this.state.rpa,
+                        linas: this.state.linas,
+                        sneupi: this.state.sneupi,
+                        rg2ModeRpa: this.state.rg2ModeRpa,
+                        sweepModeRpa: this.state.sweepModeRpa,
+                        dutyCycleLinas: this.state.dutyCycleLinas,
+                        filamentSelectLinas: this.state.filamentSelectLinas,
+                        collectorGainStateLinas: this.state.collectorGainStateLinas,
+                        dutyCycleSneupi: this.state.dutyCycleSneupi,
+                        emissionModeSneupi: this.state.emissionModeSneupi
+                    }
+                ).then((response) => {
+                    NotificationManager.success(response.message, "Packet Builder");
+                    this.props.history.push("/");
+                    this.props.history.push("/packetBuilder"); //Reload the component
+                }).catch((error) => {
+                    NotificationManager.error("Error scheduling packet", "Packet Builder");
+                    console.log(error)
+                });
+            }
         }
     }
 
