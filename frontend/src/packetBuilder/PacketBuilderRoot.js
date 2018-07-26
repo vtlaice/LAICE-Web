@@ -148,6 +148,17 @@ class PacketBuilderRoot extends Component {
     identifyScheduleErrors() {
         const errors = [];
 
+        if (!this.state.startDate) errors.push("startDate");
+        if (!this.state.endDate) errors.push("endDate");
+
+        if (this.state.startDate && this.state.endDate) {
+            if (this.state.endDate <= this.state.startDate) errors.push("endDate")
+        }
+
+        this.setState({
+            scheduleErrors: errors
+        });
+
         return errors.length === 0;
     }
 

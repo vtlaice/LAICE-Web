@@ -49,14 +49,14 @@ class PacketBuilderScheduler extends Component {
             <div>
                 <div className="d-flex">
                     <div>
-                        Start date:
+                        {this.props.errors.includes("startDate") ? <span style={{color: "red"}}>Start Date:</span> : "Start Date:"}
                         <DateTimePicker
                             value={this.state.startDate}
                             onChange={this.onStartDatePicker}
                         />
                     </div>
                     <div className="ml-auto">
-                        End date:
+                        {this.props.errors.includes("endDate") ? <span style={{color: "red"}}>End Date:</span> : "End Date:"}
                         <DateTimePicker
                             value={this.state.endDate}
                             onChange={this.onEndDatePicker}

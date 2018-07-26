@@ -91,6 +91,8 @@ class ScheduleViewerCalendar extends Component {
 
                 {this.state.selectedEvent !== null &&
                 <ScheduleViewerEventModal
+                    isAuthenticated={this.props.isAuthenticated}
+                    currentUser={this.props.currentUser}
                     packet={this.state.selectedEvent}
                     onToggleModal={this.onToggleModal}
                 />

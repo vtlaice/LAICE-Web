@@ -16,7 +16,10 @@ class ScheduleViewerRoot extends Component {
                             <CardTitle>Schedule Viewer</CardTitle>
                         </CardHeader>
                         <CardBody>
-                            <ScheduleViewerCalendar/>
+                            <ScheduleViewerCalendar
+                            isAuthenticated={this.props.isAuthenticated}
+                            currentUser={this.props.currentUser}
+                            />
                             <div className="d-flex flex-fill pt-3">
                                 <div className="ml-auto"><Button color="secondary">Export to CSV</Button></div>
                             </div>

@@ -57,9 +57,17 @@ class ScheduleViewerEventModal extends Component {
                         </Table>
                     </ModalBody>
                     <ModalFooter>
-                        <Button color="danger">Delete</Button>{' '}
-                        <Button color="primary">Edit</Button>{' '}
-                        <Button color="primary">Export to CSV</Button>{' '}
+                        {this.props.isAuthenticated && this.props.currentUser.roles.includes("ROLE_SCHEDULE_PACKET") &&
+                            <div>
+                                <Button color="danger">Delete</Button>{' '}
+                                <Button color="primary">Edit</Button>{' '}
+                            </div>
+                        }
+                        {this.props.isAuthenticated && this.props.currentUser.roles.includes("ROLE_EXPORT_PACKET") &&
+                            <div>
+                                <Button color="primary">Export to CSV</Button>{' '}
+                            </div>
+                        }
                         <Button color="secondary" onClick={this.toggleModal}>Close</Button>
                     </ModalFooter>
                 </Modal>
