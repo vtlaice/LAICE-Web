@@ -58,6 +58,7 @@ class PacketBuilderRoot extends Component {
 
         if (props.updateId) {
             API.getPacket(props.updateId).then((response) => {
+                console.log(response);
                 this.setState({
                     liibMode: response.schedulePacket.liibMode,
                     rpa: response.schedulePacket.rpa,

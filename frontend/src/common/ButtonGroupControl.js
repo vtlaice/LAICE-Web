@@ -11,6 +11,14 @@ class ButtonGroupControl extends Component {
         this.onBtn = this.onBtn.bind(this);
     }
 
+    componentWillReceiveProps(props) {
+        if (this.state.selected !== props.selected) {
+            this.setState({
+                selected: props.selected
+            })
+        }
+    }
+
     onBtn(selected) {
         this.setState({selected: selected});
 
