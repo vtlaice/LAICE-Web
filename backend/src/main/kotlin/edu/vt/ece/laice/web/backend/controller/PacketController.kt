@@ -27,6 +27,9 @@ class PacketController {
         if (!Intrinsics.verifySchedulePacket(request.schedulePacket)) {
             return ResponseEntity.badRequest().body(ApiResponse(false, "Packet structure is invalid"))
         }
+        if (!packetService.packetDoesNotOverlap(request.startTime, request.endTime)) {
+            return ResponseEntity.badRequest().body(ApiResponse(false, "Packet overlaps existing packets"))
+        }
 
         val packet = Packet(
                 startTime = request.startTime,
@@ -55,6 +58,9 @@ class PacketController {
         if (!Intrinsics.verifySchedulePacket(request.schedulePacket)) {
             return ResponseEntity.badRequest().body(ApiResponse(false, "Packet structure is invalid"))
         }
+        if (!packetService.packetDoesNotOverlap(request.startTime, request.endTime, id)) {
+            return ResponseEntity.badRequest().body(ApiResponse(false, "Packet overlaps existing packets"))
+        }
 
         val packet = packetService.getPacketById(id) ?: throw ResourceNotFoundException("Packet", "id", id)
 
@@ -65,5 +71,12 @@ class PacketController {
 
         packetService.savePacket(packet)
         return ResponseEntity.ok(ApiResponse(true, "Saved packet '${request.schedulePacket.name()}'"))
+    }
+
+    @GetMapping("/deletePacket/{id}")
+    @PreAuthorize("hasRole('SCHEDULE_PACKET')")
+    fun deletePacket(@PathVariable id: Long): ResponseEntity<*> {
+        val packet = packetService.deletePacket(id)
+        return ResponseEntity.ok(ApiResponse(true, "Packet deleted"))
     }
 }

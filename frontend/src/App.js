@@ -7,6 +7,7 @@ import momentLocalizer from 'react-widgets-moment'
 import { NotificationContainer, NotificationManager } from 'react-notifications'
 
 import './App.css';
+import SecureRoute from "./common/SecureRoute"
 import API from "./common/API"
 import MainNavbar from "./common/MainNavbar";
 import HomeRoot from "./home/HomeRoot"
@@ -82,8 +83,20 @@ class App extends Component {
           />
           <Switch>
               <Route exact path="/" render={(props) => <HomeRoot isAuthenticated={this.state.isAuthenticated} currentUser={this.state.currentUser}/>}/>
-              <Route path="/packetBuilder" render={(props) => <PacketBuilderRoot isAuthenticated={this.state.isAuthenticated} currentUser={this.state.currentUser}/>}/>
-              <Route path="/scheduleViewer" render={(props) => <ScheduleViewerRoot isAuthenticated={this.state.isAuthenticated} currentUser={this.state.currentUser}/>}/>
+              <SecureRoute
+                  isAuthenticated={this.state.isAuthenticated}
+                  currentUser={this.state.currentUser}
+                  role="ROLE_SCHEDULE_PACKET"
+                  path="/packetBuilder/:id?"
+                  render={(props) => <PacketBuilderRoot isAuthenticated={this.state.isAuthenticated} currentUser={this.state.currentUser} updateId={props.match.params.id}/>}
+              />
+              <SecureRoute
+                  isAuthenticated={this.state.isAuthenticated}
+                  currentUser={this.state.currentUser}
+                  role="ROLE_VIEW_SCHEDULE"
+                  path="/scheduleViewer"
+                  render={(props) => <ScheduleViewerRoot isAuthenticated={this.state.isAuthenticated} currentUser={this.state.currentUser}/>}
+              />
           </Switch>
           <NotificationContainer/>
       </div>

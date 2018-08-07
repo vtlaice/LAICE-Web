@@ -53,6 +53,31 @@ class PacketBuilderRoot extends Component {
         this.onSubmit = this.onSubmit.bind(this);
         this.identifyPacketErrors = this.identifyPacketErrors.bind(this);
         this.identifyScheduleErrors = this.identifyScheduleErrors.bind(this);
+
+        //Check if we have an update id, if so, get the packet object from the server and populate the ui
+
+        if (props.updateId) {
+            API.getPacket(props.updateId).then((response) => {
+                this.setState({
+                    liibMode: response.schedulePacket.liibMode,
+                    rpa: response.schedulePacket.rpa,
+                    linas: response.schedulePacket.linas,
+                    sneupi: response.schedulePacket.sneupi,
+                    rg2ModeRpa: response.schedulePacket.rg2ModeRpa,
+                    sweepModeRpa: response.schedulePacket.sweepModeRpa,
+                    dutyCycleLinas: response.schedulePacket.dutyCycleLinas,
+                    filamentSelectLinas: response.schedulePacket.filamentSelectLinas,
+                    collectorGainStateLinas: response.schedulePacket.collectorGainStateLinas,
+                    dutyCycleSneupi: response.schedulePacket.dutyCycleSneupi,
+                    emissionModeSneupi: response.schedulePacket.emissionModeSneupi,
+
+                    startDate: new Date(response.startTime),
+                    endDate: new Date(response.endTime)
+                })
+            }).catch((error) => {
+                console.log(error)
+            })
+        }
     }
 
     updateLiibMode(mode) {
@@ -164,7 +189,7 @@ class PacketBuilderRoot extends Component {
 
     onSubmit() {
         if (this.identifyScheduleErrors()) {
-            if (this.props.updateMode) {
+            if (this.props.updateId) {
                 API.updatePacket(
                     this.state.startDate,
                     this.state.endDate,
@@ -187,7 +212,7 @@ class PacketBuilderRoot extends Component {
                     this.props.history.push("/");
                     this.props.history.push("/packetBuilder");
                 }).catch((error) => {
-                    NotificationManager.error("Error updating packet", "Packet Builder");
+                    NotificationManager.error(error.message, "Packet Builder");
                     console.log(error);
                 })
             } else {
@@ -212,7 +237,7 @@ class PacketBuilderRoot extends Component {
                     this.props.history.push("/");
                     this.props.history.push("/packetBuilder"); //Reload the component
                 }).catch((error) => {
-                    NotificationManager.error("Error scheduling packet", "Packet Builder");
+                    NotificationManager.error(error.message, "Packet Builder");
                     console.log(error)
                 });
             }

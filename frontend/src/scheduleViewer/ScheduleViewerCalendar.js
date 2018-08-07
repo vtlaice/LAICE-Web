@@ -13,12 +13,15 @@ class ScheduleViewerCalendar extends Component {
             selectable: props.selectable || false,
             editable: props.editable || false,
 
+            selectedDate: new Date(),
+
             selectedEvent: null
         };
 
         this.updateDate = this.updateDate.bind(this);
         this.createEventList = this.createEventList.bind(this);
         this.onToggleModal = this.onToggleModal.bind(this);
+        this.refreshOnDeletePacket = this.refreshOnDeletePacket.bind(this);
     }
 
     componentDidMount() {
@@ -37,6 +40,10 @@ class ScheduleViewerCalendar extends Component {
         }).catch(error => {
             console.log(error)
         });
+
+        this.setState({
+            selectedDate: date
+        });
     }
 
     createEventList() {
@@ -53,6 +60,13 @@ class ScheduleViewerCalendar extends Component {
                 selectedEvent: null
             });
         }
+    }
+
+    refreshOnDeletePacket() {
+        this.setState({
+            selectedEvent: null
+        });
+        this.updateDate(this.state.selectedDate);
     }
 
     render() {
@@ -95,6 +109,7 @@ class ScheduleViewerCalendar extends Component {
                     currentUser={this.props.currentUser}
                     packet={this.state.selectedEvent}
                     onToggleModal={this.onToggleModal}
+                    refreshCalendar={this.refreshOnDeletePacket}
                 />
                 }
             </div>

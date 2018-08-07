@@ -48,6 +48,13 @@ class API {
         })
     }
 
+    static getPacket(id) {
+        return this.request({
+            url: "/api/schedule/packet/" + id,
+            method: "GET"
+        })
+    }
+
     static schedulePacket(startTime, endTime, packet) {
         return this.request({
             url: "/api/packet/schedulePacket",
@@ -75,6 +82,13 @@ class API {
     static exportPacket(packet) {
         return this.request({
             url: "/api/schedule/export/" + packet,
+            method: "GET"
+        })
+    }
+
+    static deletePacket(id) {
+        return this.request({
+            url: "/api/packet/deletePacket/" + id,
             method: "GET"
         })
     }

@@ -4,6 +4,7 @@ import edu.vt.ece.laice.web.backend.exception.ResourceNotFoundException
 import edu.vt.ece.laice.web.backend.model.Packet
 import edu.vt.ece.laice.web.backend.packet.CSVGenerator
 import edu.vt.ece.laice.web.backend.payload.ExportPacketResponse
+import edu.vt.ece.laice.web.backend.payload.FullPacketResponse
 import edu.vt.ece.laice.web.backend.payload.PacketSummaryResponse
 import edu.vt.ece.laice.web.backend.repository.UserRepository
 import edu.vt.ece.laice.web.backend.service.PacketService
@@ -33,19 +34,11 @@ class ScheduleController {
         return "${user.firstName} ${user.lastName}"
     }
 
-    @GetMapping("/all")
-    @PreAuthorize("hasRole('VIEW_SCHEDULE')")
-    fun getAllPackets(): ResponseEntity<*> {
-        val packets = packetService.getAllPackets()
-        val response = packets.map { PacketSummaryResponse(it.id, it.startTime, it.endTime, it.schedulePacket.name(), it.schedulePacket.identifyOpMode(), it.exported, it.createdAt, it.updatedAt, idToName(it.createdBy), idToName(it.updatedBy)) }
-        return ResponseEntity.ok(response)
-    }
-
     @GetMapping("/packet/{id}")
     @PreAuthorize("hasRole('VIEW_SCHEDULE')")
     fun getPacket(@PathVariable id: Long): ResponseEntity<*> {
         val packet = packetService.getPacketById(id) ?: throw ResourceNotFoundException("Packet", "id", id)
-        val response = PacketSummaryResponse(packet.id, packet.startTime, packet.endTime, packet.schedulePacket.name(), packet.schedulePacket.identifyOpMode(), packet.exported, packet.createdAt, packet.updatedAt, idToName(packet.createdBy), idToName(packet.updatedBy))
+        val response = FullPacketResponse(packet.startTime, packet.endTime, packet.schedulePacket)
         return ResponseEntity.ok(response)
     }
 

@@ -1,16 +1,24 @@
 import React, { Component } from 'react'
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Table, Alert } from 'reactstrap'
+import { withRouter } from 'react-router-dom'
 import LiibMode from '../common/LiibMode'
+import ConfirmationModal from '../common/ConfirmationModal'
+import API from '../common/API'
+import { NotificationManager } from 'react-notifications'
 
 class ScheduleViewerEventModal extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            modalOpen: true
+            modalOpen: true,
+            deleteConfirmationModalOpen: false
         };
 
-        this.toggleModal = this.toggleModal.bind(this)
+        this.toggleModal = this.toggleModal.bind(this);
+        this.openDeleteModal = this.openDeleteModal.bind(this);
+        this.deletePacket = this.deletePacket.bind(this);
+        this.editPacket = this.editPacket.bind(this);
     }
 
     toggleModal() {
@@ -20,6 +28,30 @@ class ScheduleViewerEventModal extends Component {
         });
 
         this.props.onToggleModal(newState);
+    }
+
+    openDeleteModal() {
+        this.setState({
+            deleteConfirmationModalOpen: true
+        });
+    }
+
+    deletePacket() {
+        API.deletePacket(this.props.packet.id).then(() => {
+            this.setState({
+                deleteConfirmationModalOpen: false,
+                modalOpen: false
+            });
+            NotificationManager.success("Packet deleted successfully", "Schedule Viewer");
+            this.props.refreshCalendar();
+        }).catch((error) => {
+            console.log(error);
+            NotificationManager.error("Unable to delete packet " + this.props.packet.id, "Schedule Viewer");
+        })
+    }
+
+    editPacket() {
+        this.props.history.push("/packetBuilder/" + this.props.packet.id);
     }
 
     render() {
@@ -59,8 +91,8 @@ class ScheduleViewerEventModal extends Component {
                     <ModalFooter>
                         {this.props.isAuthenticated && this.props.currentUser.roles.includes("ROLE_SCHEDULE_PACKET") &&
                             <div>
-                                <Button color="danger">Delete</Button>{' '}
-                                <Button color="primary">Edit</Button>{' '}
+                                <Button color="danger" onClick={this.openDeleteModal}>Delete</Button>{' '}
+                                <Button color="primary" onClick={this.editPacket}>Edit</Button>{' '}
                             </div>
                         }
                         {this.props.isAuthenticated && this.props.currentUser.roles.includes("ROLE_EXPORT_PACKET") &&
@@ -71,9 +103,17 @@ class ScheduleViewerEventModal extends Component {
                         <Button color="secondary" onClick={this.toggleModal}>Close</Button>
                     </ModalFooter>
                 </Modal>
+
+                <ConfirmationModal
+                    visible={this.state.deleteConfirmationModalOpen}
+                    title="Are you sure?"
+                    message="Are you sure you want to delete this packet?  This operation cannot be undone!"
+                >
+                    <Button color="danger" onClick={this.deletePacket}>Delete</Button>
+                </ConfirmationModal>
             </div>
         );
     }
 }
 
-export default ScheduleViewerEventModal
+export default withRouter(ScheduleViewerEventModal)

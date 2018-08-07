@@ -24,6 +24,8 @@ class PacketService {
 
     fun savePacket(packet: Packet) = packetRepository.save(packet)
 
+    fun deletePacket(id: Long) = packetRepository.deleteById(id)
+
     /**
      * Fetches all of the packets whose times span between the given start or end time.
      * This includes packets that both start and/or end outside of the time range, but cross through it.
@@ -49,8 +51,14 @@ class PacketService {
      * Checks if a potential packet overlaps existing packets, inclusive
      * Returns true if the specified time range overlaps any existing packets
      */
-    fun packetDoesOverlap(startTime: Instant, endTime: Instant): Boolean {
+    fun packetDoesNotOverlap(startTime: Instant, endTime: Instant, exclude: Long = -1L): Boolean {
         val inRange = getPacketsInTimeRange(startTime, endTime)
-        return inRange.isNotEmpty()
+        if (inRange.isEmpty()) return true
+
+        if (exclude != -1L) {
+            return (inRange.size == 1 && inRange[0].id == exclude)
+        }
+
+        return false
     }
 }
