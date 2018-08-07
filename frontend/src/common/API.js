@@ -79,9 +79,9 @@ class API {
         })
     }
 
-    static exportPacket(packet) {
+    static exportPacket(id) {
         return this.request({
-            url: "/api/schedule/export/" + packet,
+            url: "/api/schedule/export/" + id,
             method: "GET"
         })
     }

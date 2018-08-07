@@ -21,7 +21,7 @@ class ScheduleViewerCalendar extends Component {
         this.updateDate = this.updateDate.bind(this);
         this.createEventList = this.createEventList.bind(this);
         this.onToggleModal = this.onToggleModal.bind(this);
-        this.refreshOnDeletePacket = this.refreshOnDeletePacket.bind(this);
+        this.refreshCalendar = this.refreshCalendar.bind(this);
     }
 
     componentDidMount() {
@@ -62,7 +62,7 @@ class ScheduleViewerCalendar extends Component {
         }
     }
 
-    refreshOnDeletePacket() {
+    refreshCalendar() {
         this.setState({
             selectedEvent: null
         });
@@ -109,7 +109,7 @@ class ScheduleViewerCalendar extends Component {
                     currentUser={this.props.currentUser}
                     packet={this.state.selectedEvent}
                     onToggleModal={this.onToggleModal}
-                    refreshCalendar={this.refreshOnDeletePacket}
+                    refreshCalendar={this.refreshCalendar}
                 />
                 }
             </div>
