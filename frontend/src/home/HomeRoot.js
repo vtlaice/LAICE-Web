@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Card, CardBody, CardTitle, CardText, Fade } from 'reactstrap'
+import { Card, CardBody, CardTitle, CardText, Fade, Jumbotron } from 'reactstrap'
 
 class HomeRoot extends Component {
     constructor(props) {
@@ -8,11 +8,11 @@ class HomeRoot extends Component {
 
     render() {
         return (
-            <div>
+            <div className="pt-4 d-flex justify-content-center">
                 <Fade in>
-                <Card body width="100%">
-                    <CardTitle>Test</CardTitle>
-                </Card>
+                    <Jumbotron>
+                        <h1 className="display-3">Please Log In</h1>
+                    </Jumbotron>
                 </Fade>
             </div>
         );

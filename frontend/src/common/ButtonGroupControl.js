@@ -5,7 +5,9 @@ class ButtonGroupControl extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            selected: props.selected || null
+            selected: props.selected || null,
+            error: props.error || false,
+            errorFixed: false
         };
 
         this.onBtn = this.onBtn.bind(this);
@@ -17,10 +19,19 @@ class ButtonGroupControl extends Component {
                 selected: props.selected
             })
         }
+        if (this.state.error !== props.error) {
+            this.setState({
+                error: props.error
+            })
+        }
     }
 
     onBtn(selected) {
-        this.setState({selected: selected});
+        this.setState({
+            selected: selected,
+            error: false,
+            errorFixed: true
+        });
 
         if (this.props.onChange) {
             this.props.onChange(selected);
@@ -39,7 +50,7 @@ class ButtonGroupControl extends Component {
 
         return (
             <ButtonGroup size={this.props.size} vertical={this.props.vertical} className={this.props.className}>
-                <Button color={this.props.error ? "danger" : "secondary"} disabled outline={!this.props.error}>{this.props.name}</Button>
+                <Button color={this.state.error && !this.state.errorFixed ? "danger" : "secondary"} disabled outline={(!this.state.error) || (this.state.error && this.state.errorFixed)}>{this.props.name}</Button>
                 {childrenWithProps}
             </ButtonGroup>
         );
