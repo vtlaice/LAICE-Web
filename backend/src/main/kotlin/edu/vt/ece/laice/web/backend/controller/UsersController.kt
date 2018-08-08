@@ -2,8 +2,7 @@ package edu.vt.ece.laice.web.backend.controller
 
 import edu.vt.ece.laice.web.backend.exception.ResourceNotFoundException
 import edu.vt.ece.laice.web.backend.model.RoleName
-import edu.vt.ece.laice.web.backend.payload.EmailAvailabilityResponse
-import edu.vt.ece.laice.web.backend.payload.UserSummaryResponse
+import edu.vt.ece.laice.web.backend.payload.*
 import edu.vt.ece.laice.web.backend.repository.UserRepository
 import edu.vt.ece.laice.web.backend.security.CurrentUser
 import edu.vt.ece.laice.web.backend.security.UserPrincipal
@@ -32,6 +31,18 @@ class UsersController {
         )
 
         return ResponseEntity.ok(summary)
+    }
+
+    @PostMapping("/me/updateDetails")
+    fun updateUserDetails(@CurrentUser currentUser: UserPrincipal, @RequestBody request: UpdateUserDetailsRequest): ResponseEntity<*> {
+        val userObj = userRepository.findById(currentUser.id).orElseThrow { ResourceNotFoundException("User", "id", currentUser.id)}
+
+        userObj.firstName = request.firstName
+        userObj.lastName = request.lastName
+
+        userRepository.save(userObj)
+
+        return ResponseEntity.ok(ApiResponse(true, "User details updated successfully"))
     }
 
     @GetMapping("/isEmailAvailable")

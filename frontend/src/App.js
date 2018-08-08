@@ -32,7 +32,7 @@ class App extends Component {
         this.handleLogin = this.handleLogin.bind(this);
     }
 
-    loadCurrentUser() {
+    loadCurrentUser(reloadingFromUserDetailsChangeResponse = null) {
         this.setState({ isLoading: true });
         API.getCurrentUser().then(response => {
             this.setState({
@@ -40,6 +40,10 @@ class App extends Component {
                 isAuthenticated: true,
                 isLoading: false
             });
+
+            if (reloadingFromUserDetailsChangeResponse) {
+                NotificationManager.success(reloadingFromUserDetailsChangeResponse.message, "User settings")
+            }
         }).catch(error => {
             console.log(error);
             this.setState({ isLoading: false });
@@ -76,10 +80,12 @@ class App extends Component {
         );
     return (
       <div>
-          <MainNavbar isAuthenticated={this.state.isAuthenticated}
-                      currentUser={this.state.currentUser}
-                      onLogin={this.handleLogin}
-                      onLogout={this.handleLogout}
+          <MainNavbar
+              reloadUser={this.loadCurrentUser}
+              isAuthenticated={this.state.isAuthenticated}
+              currentUser={this.state.currentUser}
+              onLogin={this.handleLogin}
+              onLogout={this.handleLogout}
           />
           <Switch>
               <Route exact path="/" render={(props) => <HomeRoot isAuthenticated={this.state.isAuthenticated} currentUser={this.state.currentUser}/>}/>

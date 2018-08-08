@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
-import { Card, CardBody, CardTitle, CardText, Fade, Jumbotron } from 'reactstrap'
+import { Card, CardHeader, CardBody, CardTitle, CardText, Fade, Jumbotron } from 'reactstrap'
+
+import CenterFadeCard from "../common/CenterFadeCard"
 
 class HomeRoot extends Component {
     constructor(props) {
@@ -8,11 +10,22 @@ class HomeRoot extends Component {
 
     render() {
         return (
-            <div className="pt-4 d-flex justify-content-center">
+            <div>
                 <Fade in>
-                    <Jumbotron>
-                        <h1 className="display-3">Please Log In</h1>
-                    </Jumbotron>
+                    <CenterFadeCard>
+                        <CardHeader>
+                            <CardTitle>LAICE</CardTitle>
+                        </CardHeader>
+                        <CardBody>
+                            {!this.props.isAuthenticated && <CardText>Please log in</CardText>}
+                            {this.props.isAuthenticated &&
+                            <div>
+                                <CardText>Hello, {this.props.currentUser.firstName} {this.props.currentUser.lastName}!</CardText>
+
+                            </div>
+                            }
+                        </CardBody>
+                    </CenterFadeCard>
                 </Fade>
             </div>
         );

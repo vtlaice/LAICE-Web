@@ -4,28 +4,39 @@ import { Navbar, NavbarBrand, Nav, NavItem, Button, NavLink, UncontrolledDropdow
 import { NavLink as RRNavLink } from 'react-router-dom'
 import LoginButton from './LoginButton'
 import API from './API'
+import UserSettingsModal from './UserSettingsModal'
 
 class MainNavbar extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            loginPopoverOpen: false
+            loginPopoverOpen: false,
+            userSettingsModalOpen: false
         };
 
         this.toggleLoginPopover = this.toggleLoginPopover.bind(this);
-        this.handleLoginSubmit = this.handleLoginSubmit.bind(this);
         this.createNavItem = this.createNavItem.bind(this);
         this.createSecureNavItem = this.createSecureNavItem.bind(this);
         this.createLoginLogoutComponent = this.createLoginLogoutComponent.bind(this);
+        this.onOptionsButton = this.onOptionsButton.bind(this);
+        this.onOptionsModalToggle = this.onOptionsModalToggle.bind(this);
     }
 
     toggleLoginPopover() {
         this.setState({ loginPopoverOpen: !this.state.loginPopoverOpen })
     }
 
-    handleLoginSubmit() {
-        const request = {  }
+    onOptionsButton() {
+        this.setState({
+            userSettingsModalOpen: true
+        })
+    }
+
+    onOptionsModalToggle(newState) {
+        this.setState({
+            userSettingsModalOpen: newState
+        })
     }
 
     createNavItem(name, page, doRender = true, exact = false) {
@@ -56,7 +67,7 @@ class MainNavbar extends Component {
                     {this.props.currentUser.firstName + " " + this.props.currentUser.lastName}
                 </DropdownToggle>
                 <DropdownMenu>
-                    <DropdownItem href="#">Options</DropdownItem>
+                    <DropdownItem href="#" onClick={this.onOptionsButton}>Options</DropdownItem>
                     <DropdownItem href="#" onClick={this.props.onLogout}>Logout</DropdownItem>
                 </DropdownMenu>
             </UncontrolledDropdown>
@@ -77,6 +88,7 @@ class MainNavbar extends Component {
                         {this.createLoginLogoutComponent()}
                     </Nav>
                 </Navbar>
+                <UserSettingsModal reloadUser={this.props.reloadUser} currentUser={this.props.currentUser} visible={this.state.userSettingsModalOpen} onToggle={this.onOptionsModalToggle}/>
             </div>
         );
     }

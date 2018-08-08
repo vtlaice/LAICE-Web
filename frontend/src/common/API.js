@@ -92,6 +92,25 @@ class API {
             method: "GET"
         })
     }
+
+    static updatePassword(oldPassword, newPassword) {
+        return this.request({
+            url: "/api/auth/updatePassword",
+            method: "POST",
+            body: JSON.stringify({
+                oldPassword: oldPassword,
+                newPassword: newPassword
+            })
+        })
+    }
+
+    static updateUserDetails(details) {
+        return this.request({
+            url: "/api/users/me/updateDetails",
+            method: "POST",
+            body: JSON.stringify(details)
+        })
+    }
 }
 
 
