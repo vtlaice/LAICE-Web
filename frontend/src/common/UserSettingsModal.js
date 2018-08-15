@@ -14,8 +14,8 @@ class UserSettingsModal extends Component {
             oldPassword: "",
             newPassword: "",
 
-            firstName: props.currentUser.firstName,
-            lastName: props.currentUser.lastName
+            firstName: props.isAuthenticated ? props.currentUser.firstName : "",
+            lastName: props.isAuthenticated ? props.currentUser.lastName : ""
         };
 
         this.toggle = this.toggle.bind(this);
