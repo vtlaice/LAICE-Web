@@ -8,6 +8,7 @@ import java.time.Instant
 import java.time.Month
 import java.time.Year
 import java.time.ZoneOffset
+import java.time.temporal.ChronoUnit
 
 @Service
 class PacketService {
@@ -20,6 +21,10 @@ class PacketService {
 
     fun getPacketById(id: Long): Packet? {
         return packetRepository.findById(id).orElseGet { null } //Convert an Optional to a Kotlin nullable
+    }
+
+    fun getLastPacket(): Packet? {
+        return packetRepository.findFirstByOrderByIdDesc().orElseGet { null }
     }
 
     fun savePacket(packet: Packet) = packetRepository.save(packet)
@@ -60,5 +65,18 @@ class PacketService {
         }
 
         return false
+    }
+
+    /**
+     * Gets the starting time for a new packet, which is either the
+     * ending time of the last packet, or the current system time rounded to the nearest hour
+     * if there are no existing packets.
+     */
+    fun getNewPacketStartingTime(): Instant {
+        val packet = getLastPacket()
+        if (packet != null) {
+            return packet.endTime
+        }
+        return Instant.now().truncatedTo(ChronoUnit.HOURS)
     }
 }

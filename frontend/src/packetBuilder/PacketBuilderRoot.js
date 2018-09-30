@@ -54,11 +54,19 @@ class PacketBuilderRoot extends Component {
         this.identifyPacketErrors = this.identifyPacketErrors.bind(this);
         this.identifyScheduleErrors = this.identifyScheduleErrors.bind(this);
 
-        //Check if we have an update id, if so, get the packet object from the server and populate the ui
+        //Populate initial packet starting date (this will get overwritten if we have an update id)
+        API.getNewPacketStartTime().then((response)=> {
+            this.setState({
+                startDate: new Date(response.time),
+                endDate: new Date(response.time)
+            })
+        }).catch((error) => {
+            console.log(error)
+        });
 
+        //Check if we have an update id, if so, get the packet object from the server and populate the ui
         if (props.updateId) {
             API.getPacket(props.updateId).then((response) => {
-                console.log(response);
                 this.setState({
                     liibMode: response.schedulePacket.liibMode,
                     rpa: response.schedulePacket.rpa,

@@ -55,6 +55,13 @@ class API {
         })
     }
 
+    static getNewPacketStartTime() {
+        return this.request({
+            url: "/api/packet/getNewPacketStartTime",
+            method: "GET"
+        })
+    }
+
     static schedulePacket(startTime, endTime, packet) {
         return this.request({
             url: "/api/packet/schedulePacket",

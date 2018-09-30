@@ -5,6 +5,7 @@ import edu.vt.ece.laice.web.backend.intrinsics.Intrinsics
 import edu.vt.ece.laice.web.backend.model.Packet
 import edu.vt.ece.laice.web.backend.payload.ApiResponse
 import edu.vt.ece.laice.web.backend.payload.SchedulePacketRequest
+import edu.vt.ece.laice.web.backend.payload.TimeResponse
 import edu.vt.ece.laice.web.backend.repository.PacketRepository
 import edu.vt.ece.laice.web.backend.service.PacketService
 import org.springframework.beans.factory.annotation.Autowired
@@ -39,6 +40,13 @@ class PacketController {
 
         packetService.savePacket(packet) //Add the packet to the repository
         return ResponseEntity.ok(ApiResponse(true, "Scheduled packet '${request.schedulePacket.name()}'"))
+    }
+
+    @GetMapping("/getNewPacketStartTime")
+    @PreAuthorize("hasRole('SCHEDULE_PACKET')")
+    fun getNewPacketStartTime(): ResponseEntity<*> {
+        val response = TimeResponse(packetService.getNewPacketStartingTime())
+        return ResponseEntity.ok(response)
     }
 
     @GetMapping("/getPacket/{id}")
