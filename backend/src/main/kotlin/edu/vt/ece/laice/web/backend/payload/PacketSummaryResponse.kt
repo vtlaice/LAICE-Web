@@ -12,5 +12,5 @@ data class PacketSummaryResponse(val id: Long,
                                  val createdAt: Instant,
                                  val lastModifiedAt: Instant,
                                  val createdBy: String,
-                                 val lastModifiedBy: String
-)
+                                 val lastModifiedBy: String,
+                                 val writable: Boolean)

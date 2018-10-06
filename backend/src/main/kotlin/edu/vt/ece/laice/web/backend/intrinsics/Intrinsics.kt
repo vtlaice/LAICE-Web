@@ -52,4 +52,16 @@ object Intrinsics {
 
         return true
     }
+
+    /**
+     * Verifies the following conditions about the start time of the packet
+     *
+     * 1. The start time is not after the current time
+     */
+    fun verifyStartTime(startTime: Instant): Boolean {
+        val now = Instant.now()
+        if (!startTime.isAfter(now)) return false
+
+        return true
+    }
 }

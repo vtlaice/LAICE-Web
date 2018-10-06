@@ -22,6 +22,9 @@ class PacketController {
     @PostMapping("/schedulePacket")
     @PreAuthorize("hasRole('SCHEDULE_PACKET')")
     fun schedulePacket(@RequestBody request: SchedulePacketRequest): ResponseEntity<*> {
+        if (!Intrinsics.verifyStartTime(request.startTime)) {
+            return ResponseEntity.badRequest().body(ApiResponse(false, "Packet start time has already elapsed"))
+        }
         if (!Intrinsics.verifyTimeRange(request.startTime, request.endTime)) {
             return ResponseEntity.badRequest().body(ApiResponse(false, "End time is not after start time"))
         }
@@ -60,6 +63,12 @@ class PacketController {
     @PostMapping("/updatePacket/{id}")
     @PreAuthorize("hasRole('SCHEDULE_PACKET')")
     fun updatePacket(@RequestBody request: SchedulePacketRequest, @PathVariable id: Long): ResponseEntity<*> {
+        if (!packetService.isPacketWritable(id)) {
+            return ResponseEntity.badRequest().body(ApiResponse(false, "Packet is no longer writable"))
+        }
+        if (!Intrinsics.verifyStartTime(request.startTime)) {
+            return ResponseEntity.badRequest().body(ApiResponse(false, "Packet start time has already elapsed"))
+        }
         if (!Intrinsics.verifyTimeRange(request.startTime, request.endTime)) {
             return ResponseEntity.badRequest().body(ApiResponse(false, "End time is not after start time"))
         }
@@ -84,6 +93,9 @@ class PacketController {
     @GetMapping("/deletePacket/{id}")
     @PreAuthorize("hasRole('SCHEDULE_PACKET')")
     fun deletePacket(@PathVariable id: Long): ResponseEntity<*> {
+        if (!packetService.isPacketWritable(id)) {
+            return ResponseEntity.badRequest().body(ApiResponse(false, "Packet is no longer writable"))
+        }
         val packet = packetService.deletePacket(id)
         return ResponseEntity.ok(ApiResponse(true, "Packet deleted"))
     }

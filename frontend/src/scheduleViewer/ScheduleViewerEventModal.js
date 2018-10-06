@@ -84,6 +84,9 @@ class ScheduleViewerEventModal extends Component {
                 <Modal isOpen={this.state.modalOpen} toggle={this.toggleModal}>
                     <ModalHeader toggle={this.toggleModal}>{this.props.packet.name}</ModalHeader>
                     <ModalBody>
+                        {!this.props.packet.writable &&
+                        <Alert color="warning">This packet has already elapsed and is now view only</Alert>
+                        }
                         {this.props.packet.exported &&
                         <Alert color="primary">This packet has been exported</Alert>
                         }
@@ -117,8 +120,8 @@ class ScheduleViewerEventModal extends Component {
 
                         {this.props.isAuthenticated && this.props.currentUser.roles.includes("ROLE_SCHEDULE_PACKET") &&
                             <div>
-                                <Button disabled={this.state.loadingDownload} color="danger" onClick={this.openDeleteModal}>Delete</Button>{' '}
-                                <Button disabled={this.state.loadingDownload} color="primary" onClick={this.editPacket}>Edit</Button>{' '}
+                                <Button disabled={this.state.loadingDownload || !this.props.packet.writable} color="danger" onClick={this.openDeleteModal}>Delete</Button>{' '}
+                                <Button disabled={this.state.loadingDownload || !this.props.packet.writable} color="primary" onClick={this.editPacket}>Edit</Button>{' '}
                             </div>
                         }
                         {this.props.isAuthenticated && this.props.currentUser.roles.includes("ROLE_EXPORT_PACKET") &&

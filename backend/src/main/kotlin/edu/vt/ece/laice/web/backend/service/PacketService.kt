@@ -79,4 +79,14 @@ class PacketService {
         }
         return Instant.now().truncatedTo(ChronoUnit.HOURS)
     }
+
+    /**
+     * Checks if a packet is writable.  A packet is not writable if the start time has passed the current time
+     */
+    fun isPacketWritable(id: Long): Boolean {
+        val now = Instant.now()
+        val packet = packetRepository.findById(id).orElseGet { null } ?: return false
+        if (!packet.startTime.isAfter(now)) return false
+        return true
+    }
 }

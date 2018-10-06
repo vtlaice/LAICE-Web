@@ -34,6 +34,10 @@ class ScheduleController {
         return "${user.firstName} ${user.lastName}"
     }
 
+    private fun writable(time: Instant): Boolean {
+        return time.isAfter(Instant.now())
+    }
+
     @GetMapping("/packet/{id}")
     @PreAuthorize("hasRole('VIEW_SCHEDULE')")
     fun getPacket(@PathVariable id: Long): ResponseEntity<*> {
@@ -47,7 +51,7 @@ class ScheduleController {
     fun getPacketsForMonth(@PathVariable month: Int, @PathVariable year: Int): ResponseEntity<*> {
         val packets = packetService.getPacketsForMonth(month, year)
 
-        val response = packets.map { PacketSummaryResponse(it.id, it.startTime, it.endTime, it.schedulePacket.name(), it.schedulePacket.identifyOpMode(), it.exported, it.createdAt, it.updatedAt, idToName(it.createdBy), idToName(it.updatedBy)) }
+        val response = packets.map { PacketSummaryResponse(it.id, it.startTime, it.endTime, it.schedulePacket.name(), it.schedulePacket.identifyOpMode(), it.exported, it.createdAt, it.updatedAt, idToName(it.createdBy), idToName(it.updatedBy), writable(it.startTime)) }
         return ResponseEntity.ok(response)
     }
 
@@ -63,5 +67,4 @@ class ScheduleController {
 
         return ResponseEntity.ok(response)
     }
-
 }
